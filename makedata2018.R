@@ -95,5 +95,5 @@ summary(data)
 # data = data %>% mutate(lon = Lon %/% 1 + (Lon %% 1)*60 + 0.05, lat = Lat %/% 1 + (Lat %% 1)*60 + 0.05)
 
 setwd("/Users/Yuki/Dropbox/eDNA_INLA")
-write.csv(mifish, "jont_edna2018.csv", fileEncoding = "CP932")
-write.csv(data, "jont_cpue2018.csv", fileEncoding = "CP932")
+write.csv(mifish, "joint_edna2018.csv", fileEncoding = "CP932")
+write.csv(data, "joint_cpue2018.csv", fileEncoding = "CP932")
