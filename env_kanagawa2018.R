@@ -34,7 +34,7 @@ for(i in 1:length(st)){
 envk1 = data.frame(t2) %>% mutate(year = 2018, month = as.numeric(str_sub(file, 5, 6)), day = NA, Point = as.numeric(str_sub(file, 8, 10)))
 (colnames(envk1))
 envk1 = envk1 %>% select("T090C", "Ph", "Sal00", "Sbeox0Mg.L","SorB", "year", "month", "day", "Point")
-colnames(envk1) = c("temp", "pH", "salinity", "DO_mg","SorB", "year", "month", "day", "Point")
+colnames(envk1) = c("temp", "pH", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
 
 # st129 ---------------------------------------------------------
 st2 = "st129"
@@ -56,7 +56,7 @@ envk2 = data.frame(t2) %>% mutate(date = as.Date(日付情報)) %>% mutate(year 
 colnames(envk2) #pHがない！！
 envk2 = envk2[, c(4,5,14,17,19:22)]
 colnames(envk2)
-colnames(envk2) = c("temp", "salinity", "DO_mg","SorB", "year", "month", "day", "Point")
+colnames(envk2) = c("temp", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
 envk2 = envk2 %>% mutate(pH = NA)
 
 env = rbind(envk1, envk2)
