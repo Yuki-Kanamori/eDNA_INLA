@@ -1,6 +1,5 @@
 setwd("/Users/Yuki/Dropbox/eDNA_INLA")
 
-require(INLA)
 require(tidyverse)
 require(openxlsx)
 
