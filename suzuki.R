@@ -15,7 +15,7 @@ data = read.csv("joint_cpue2018.csv")
 
 
 # スズキ ------------------------------------
-e_fish = mifish %>% filter(sp == "sizuki", layer == "B")
+e_fish = mifish %>% filter(sp == "suzuki", layer == "B")
 summary(e_fish)
 edna = (e_fish$count > 0) + 0
 
