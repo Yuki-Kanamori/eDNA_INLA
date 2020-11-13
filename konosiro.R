@@ -190,12 +190,12 @@ best_kono = res_kono
 index_ep = inla.stack.index(stk, tag = "ep_dat")$data
 index_cp = inla.stack.index(stk, tag = "cp_dat")$data
 
-pred_mean_e = best_ana$summary.fitted.values[index_ep, "mean"]
-pred_mean_c = best_ana$summary.fitted.values[index_cp, "mean"]
-pred_ll_e = best_ana$summary.fitted.values[index_ep, "0.025quant"]
-pred_ul_e = best_ana$summary.fitted.values[index_ep, "0.975quant"]
-pred_ll_c = best_ana$summary.fitted.values[index_cp, "0.025quant"]
-pred_ul_c = best_ana$summary.fitted.values[index_cp, "0.975quant"]
+pred_mean_e = best_kono$summary.fitted.values[index_ep, "mean"]
+pred_mean_c = best_kono$summary.fitted.values[index_cp, "mean"]
+pred_ll_e = best_kono$summary.fitted.values[index_ep, "0.025quant"]
+pred_ul_e = best_kono$summary.fitted.values[index_ep, "0.975quant"]
+pred_ll_c = best_kono$summary.fitted.values[index_cp, "0.025quant"]
+pred_ul_c = best_kono$summary.fitted.values[index_cp, "0.975quant"]
 
 dpm_e = rbind(data.frame(east = coop[, 1], north = coop[, 2],
                          value = pred_mean_e, variable = "pred_mean_eDNA"),
@@ -245,8 +245,8 @@ g+t+f+c+s+pol+c_map+theme_bw()+labs(title = "konosiro")
 range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
 # range_e = apply(coop, 2, range)
 proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
-mean_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.e$mean)
-sd_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.e$sd)
+mean_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.e$mean)
+sd_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.e$sd)
 
 df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
 df_ie$mean_s = as.vector(mean_s_ie)
@@ -286,8 +286,8 @@ grid.arrange(m, sd, ncol = 2)
 range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
 # range_e = apply(coop, 2, range)
 proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
-mean_s_ic2 = inla.mesh.project(proj_e, best_ana$summary.random$i.c2$mean)
-sd_s_ic2 = inla.mesh.project(proj_e, best_ana$summary.random$i.c2$sd)
+mean_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$mean)
+sd_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$sd)
 
 df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
 df_ic2$mean_s = as.vector(mean_s_ic2)
@@ -310,8 +310,8 @@ grid.arrange(m, sd, ncol = 2)
 range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
 # range_e = apply(coop, 2, range)
 proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
-mean_s_ie2 = inla.mesh.project(proj_e, best_ana$summary.random$i.e2$mean)
-sd_s_ie2 = inla.mesh.project(proj_e, best_ana$summary.random$i.e2$sd)
+mean_s_ie2 = inla.mesh.project(proj_e, best_kono$summary.random$i.e2$mean)
+sd_s_ie2 = inla.mesh.project(proj_e, best_kono$summary.random$i.e2$sd)
 
 df_ie2 = expand.grid(x = proj_e$x, y = proj_e$y)
 df_ie2$mean_s = as.vector(mean_s_ie2)
@@ -350,28 +350,28 @@ grid.arrange(m, sd, ncol = 2)
 #      cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
 
 #not using inla.group
-plot(best_ana$summary.random$temp$ID,
-     best_ana$summary.random$temp$mean,
-     type = "l", ylab = "Temp effect", xlab = "Temp", 
-     cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
-plot(best_ana$summary.random$salinity$ID,
-     best_ana$summary.random$salinity$mean,
-     type = "l", ylab = "Sal. effect", xlab = "Salinity", 
-     cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
-summary(e_fish)
-plot(best_ana$summary.random$DO$ID,
-     best_ana$summary.random$DO$mean,
-     type = "l", ylab = "DO effect", xlab = "DO", 
-     cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
-plot(best_ana$summary.random$pH$ID,
-     best_ana$summary.random$pH$mean,
-     type = "l", ylab = "pH effect", xlab = "pH", 
-     cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
+# plot(best_kono$summary.random$temp$ID,
+#      best_kono$summary.random$temp$mean,
+#      type = "l", ylab = "Temp effect", xlab = "Temp", 
+#      cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
+# plot(best_kono$summary.random$salinity$ID,
+#      best_kono$summary.random$salinity$mean,
+#      type = "l", ylab = "Sal. effect", xlab = "Salinity", 
+#      cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
+# summary(e_fish)
+# plot(best_kono$summary.random$DO$ID,
+#      best_kono$summary.random$DO$mean,
+#      type = "l", ylab = "DO effect", xlab = "DO", 
+#      cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
+# plot(best_kono$summary.random$pH$ID,
+#      best_kono$summary.random$pH$mean,
+#      type = "l", ylab = "pH effect", xlab = "pH", 
+#      cex.naim = 1.5, cex.lab = 1.5, cex.axis = 1.5, cex = 1.5, lwd = 2)
 
-effect = rbind(data.frame(x = best_ana$summary.random$temp$ID, y = best_ana$summary.random$temp$mean, variable = "temp"),
-               data.frame(x = best_ana$summary.random$salinity$ID, y = best_ana$summary.random$salinity$mean, variable = "sal"),
-               data.frame(x = best_ana$summary.random$DO$ID, y = best_ana$summary.random$DO$mean, variable = "do"),
-               data.frame(x = best_ana$summary.random$pH$ID, y = best_ana$summary.random$pH$mean, variable = "ph"))
+effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "temp"),
+               data.frame(x = best_kono$summary.random$salinity$ID, y = best_kono$summary.random$salinity$mean, variable = "sal"),
+               data.frame(x = best_kono$summary.random$DO$ID, y = best_kono$summary.random$DO$mean, variable = "do"),
+               data.frame(x = best_kono$summary.random$pH$ID, y = best_kono$summary.random$pH$mean, variable = "ph"))
 effect = effect %>% filter(x != 1)
 effect$variable = factor(effect$variable, levels = c("temp", "sal", "do", "ph"))
 g = ggplot(effect, aes(x = x, y = y))
