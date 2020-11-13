@@ -22,7 +22,8 @@ edna = (e_fish$count > 0) + 0
 c_fish = data %>% filter(FISH == "maanago")
 # c_mako = data %>% filter(FISH == "makogarei", Y == 2018, M > 2) #eDNAと月を揃えた方が良い？
 summary(c_fish)
-catch = (c_fish$CATCH > 0) + 0
+# catch = (c_fish$CATCH > 0) + 0
+catch = (c_fish$CPUE > 0) + 0
 summary(catch)
 
 # e_fish = e_fish %>% mutate(Month = as.factor(month))
@@ -165,15 +166,18 @@ stk_catch = inla.stack(c_stk, cp_stk)
 stk = inla.stack(stk_edna, stk_catch)
 
 # formula
-formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
+formula = y ~ 0 + cb.0 + eb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
+# formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
 # formula = y ~ 0 + eb.0 + cb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.e, model = spde) + f(i.c, copy = "i.e", fixed = FALSE) + f(effort, model = "rw1")
 
 
 # fitting
+# *** Warning *** You might want to consider to setting ``control.predictor=list(link=...)''
+# *** Warning *** otherwise the identity link will be used to compute the fitted values for NA data
 res_ana = inla(formula, 
                data = inla.stack.data(stk), 
                family = c("binomial", "binomial"), 
-               control.predictor = list(compute = TRUE, A = inla.stack.A(stk)), 
+               control.predictor = list(compute = TRUE, A = inla.stack.A(stk), link = 1), 
                control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
                control.compute = list(waic = TRUE, dic = TRUE))
 
@@ -240,6 +244,7 @@ s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "
 g+t+f+c+s+pol+c_map+theme_bw()+labs(title = "anago")
 
 # projecting the spatial field ----------------------------------
+# latent distribution -------------------------------------------
 range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
 # range_e = apply(coop, 2, range)
 proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
@@ -278,6 +283,55 @@ labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
 m = g1+t+v+c+pol+c_map+labs1+theme_bw()
 sd = g2+t+v+c+pol+c_map+labs2+theme_bw()
 grid.arrange(m, sd, ncol = 2)
+
+
+# latent fisheries pattern -------------------------------------------
+range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+# range_e = apply(coop, 2, range)
+proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
+mean_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.c2$mean)
+sd_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.c2$sd)
+
+df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
+df_ie$mean_s = as.vector(mean_s_ie)
+df_ie$sd_s = as.vector(sd_s_ie)
+
+g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
+g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
+# r = geom_raster()
+t = geom_tile()
+v = scale_fill_viridis(na.value = "transparent")
+c = coord_fixed(ratio = 1)
+labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
+labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
+m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+sd = g2+t+v+c+pol+c_map+labs2+theme_bw()
+grid.arrange(m, sd, ncol = 2)
+
+
+# latent pom pattern -------------------------------------------
+range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+# range_e = apply(coop, 2, range)
+proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
+mean_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.e2$mean)
+sd_s_ie = inla.mesh.project(proj_e, best_ana$summary.random$i.e2$sd)
+
+df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
+df_ie$mean_s = as.vector(mean_s_ie)
+df_ie$sd_s = as.vector(sd_s_ie)
+
+g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
+g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
+# r = geom_raster()
+t = geom_tile()
+v = scale_fill_viridis(na.value = "transparent")
+c = coord_fixed(ratio = 1)
+labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
+labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
+m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+sd = g2+t+v+c+pol+c_map+labs2+theme_bw()
+grid.arrange(m, sd, ncol = 2)
+
 
 
 # environmental effect -----------------------------------------------------------
