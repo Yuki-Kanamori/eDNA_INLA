@@ -108,7 +108,7 @@ coop = coop[which(ind == 1), ]
 plot(coop, asp = 1)
 
 Ap = inla.spde.make.A(mesh = mesh2, loc = coop)
-dim(Ap) #398, 618
+dim(Ap) #431, 618
 
 # spde
 spde = inla.spde2.pcmatern(mesh = mesh2, alpha = 2, prior.range = c(0.01, 0.05), prior.sigma = c(1, 0.01))
