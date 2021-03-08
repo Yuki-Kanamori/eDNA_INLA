@@ -8,15 +8,21 @@ eDNAによる生物の空間分布の推定（把握？）は，希少種の保�
 ・eDNAと問題点
 生物の分布（多様性？）のパターンとその背後にあるメカニズムを明らかにすることは，生態学におけるエッセンシャルな課題である．
 eDNAは，従来のモニタリング手法に比べてnon-invasiveで費用対効果が高い．そのため，（ターゲットとする種のeDNAの存否から）外来種の侵入・多様性のホットスポット・希少種の検出に一役買っている．
+（外来種 Larson et al. 2020, Front Ecol Environ; Thomas et al. 2020 Env DNA）
 しかし，eDNAのpresence/absenceは物理化学的環境（例えば，水温，pH，流れなど）による影響を受けるため，eDNAのpresence/absenceには多くの不確実性が含まれている．（Dorazio et al. 2020のイントロに引用がある）
 例えば，海流や鉛直混合などの流れのある水界では，eDNAは受動的に輸送されるため，eDNAが流れ着いた先で検出された場合には．
 つまり，eDNA調査を行ってターゲット種が検出されたとしても，そこにターゲット種が生息しているとは言い切れないのである．
 従って，eDNAを用いて生物の分布を明らかにするためには，物理化学的環境の影響を考慮して分布域を推定することが必要不可欠である．
 
+
+
+
+
 ・joint modelについて（何を書く．．．？）
 joint modelはデータを統合して
 Integrated species distribution model is a model which used the different data type with strengths and weaknesses characteristics. Heterogeneous data type
 Integrated species distribution model is to integrate the different data sources available into a single model in a way that retains the strengths of each. 
+
 
 
 ・東京湾における魚類（本郷さんの論文が役立ちそう）
@@ -36,9 +42,9 @@ Integrated species distribution model is to integrate the different data sources
 〜のために，東京湾に生息する魚類のeDNAと漁獲量データに対してjoint modelを適用し，
 eDNAによる分布域の推定精度
 東京湾に生息する魚類のeDNAと漁獲データに対してjoint modelを適用し，魚類の分布域を推定する．
-eDNAによる
+eDNAの出現率に影響する物理的環境要因と
 (1) eDNAと漁獲データに対してjoint modelを適用して，魚類の分布域を推定する
-(2) 量データから推定された分布域と，eDNAと漁獲データから推定された分布域と比較を行い，魚種による違いを明らかにする
+(2) モデルから推定された3つの空間分布（eDNAと漁獲量データから推定された分布域・eDNAの分布域・漁獲場所の分布域）を魚種間で比較
 (3) 
 
 [方法]
