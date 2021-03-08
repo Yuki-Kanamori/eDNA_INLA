@@ -180,8 +180,15 @@ res_kono = inla(formula,
                control.predictor = list(compute = TRUE, A = inla.stack.A(stk), link = 1), 
                control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
                control.compute = list(waic = TRUE, dic = TRUE))
+# res_kono2 = inla(formula, 
+#                 data = inla.stack.data(stk), 
+#                 family = c("binomial", "binomial"), 
+#                 control.predictor = list(compute = TRUE, A = inla.stack.A(stk)), 
+#                 control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
+#                 control.compute = list(waic = TRUE, dic = TRUE))
 
 res_kono$waic$waic; res_kono$dic$dic #640.3, 640.4
+# res_kono2$waic$waic; res_kono2$dic$dic #640.4, 640.5 
 summary(res_kono)
 
 # plot the fitted values on a map -------------------------------
