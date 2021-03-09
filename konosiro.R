@@ -53,7 +53,7 @@ table(rowSums(e_A > 0))
 table(rowSums(e_A))
 table(colSums(e_A) > 0)
 c_A = inla.spde.make.A(mesh2, loc = c_loc)
-dim(c_A) # 36, 611
+dim(c_A) # 2321, 618
 table(rowSums(c_A > 0))
 table(rowSums(c_A))
 table(colSums(c_A) > 0)
@@ -108,7 +108,7 @@ coop = coop[which(ind == 1), ]
 plot(coop, asp = 1)
 
 Ap = inla.spde.make.A(mesh = mesh2, loc = coop)
-dim(Ap) #398, 611
+dim(Ap) #431, 618
 
 # spde
 spde = inla.spde2.pcmatern(mesh = mesh2, alpha = 2, prior.range = c(0.01, 0.05), prior.sigma = c(1, 0.01))
@@ -180,8 +180,15 @@ res_kono = inla(formula,
                control.predictor = list(compute = TRUE, A = inla.stack.A(stk), link = 1), 
                control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
                control.compute = list(waic = TRUE, dic = TRUE))
+# res_kono2 = inla(formula, 
+#                 data = inla.stack.data(stk), 
+#                 family = c("binomial", "binomial"), 
+#                 control.predictor = list(compute = TRUE, A = inla.stack.A(stk)), 
+#                 control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
+#                 control.compute = list(waic = TRUE, dic = TRUE))
 
 res_kono$waic$waic; res_kono$dic$dic #640.3, 640.4
+# res_kono2$waic$waic; res_kono2$dic$dic #640.4, 640.5 
 summary(res_kono)
 
 # plot the fitted values on a map -------------------------------
