@@ -18,11 +18,14 @@ eDNAは，従来のモニタリング手法に比べてnon-invasiveで費用対�
 ・これまでの研究のデメリット（environment-specific, DNAの状態にも依存するので結局は種や状況固有になってしまう）
 そのような不確実性に打ち勝ってeDNAから分布域を推定するためには，ecology of eDNA（時空間的な分布パターン，状態，輸送，消失などのeDNAが生まれてから消えていくまでのプロセス）がcuriticalであるとされている．
 そのため，対象種のeDNAの生成と消失パターンをタンク実験で計測したり，物理海流モデルを使ってeDNAのtransportを考慮したりする方法なされてきた．eDNAのbehavior
-これらの手法はeDNAのfateの情報を正確に収集できるため対象種の分布の精度の向上が期待されるが，eDNAの調査の容易さに比べて非常に費用対効果が悪く手間がかかる．調査の容易さを上回る手間である．
+しかしこれらの手法はeDNAのfateの情報を正確に収集できるため対象種の分布の精度の向上が期待されるが，eDNAの調査の容易さに比べて非常に費用対効果が悪く手間がかかる．調査の容易さを上回る手間である．
 特に，複数種を扱う研究（例えば，多様性のモニタリングや水産資源の
 
 
 ・joint modelについて（何を書く．．．？）
+物理化学的要因による不確実性を考慮して生物の分布域を推定するalternativeな方法として，我々はintegrated species distribution modelを提案する．
+This model uses the different data type with strengths and weaknesses characteristics. 
+
 joint modelはデータを統合して
 Integrated species distribution model is a model which used the different data type with strengths and weaknesses characteristics. Heterogeneous data type
 Integrated species distribution model is to integrate the different data sources available into a single model in a way that retains the strengths of each. 
