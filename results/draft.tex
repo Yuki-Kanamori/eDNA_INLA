@@ -1,0 +1,365 @@
+\documentclass[12pt]{article}
+\usepackage{times}
+\usepackage{plext}
+\usepackage{cite}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{lineno}
+\usepackage{color}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{array, booktabs}
+\usepackage[top=25truemm,bottom=25truemm,left=30truemm,right=30truemm]{geometry}
+\usepackage{threeparttable}
+\usepackage{ulem}
+%\usepackage{amsmath}
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\tablename}{Table}
+\begin{document}\setcounter{page}{1}
+\renewcommand\citeleft{(}
+\renewcommand\citeright{)}
+
+\flushleft{\textbf{Title: Inetgrated spatial model estimates the fish distribution using environmental DNA and catch data}}\\
+%\flushleft{\textbf{Running title: }}\\
+\flushleft{Yuki Kanamori$^{1\ast}$, Hiroshi Okamura$^{2}$, Shota Nishijima$^{2}$, Yuki Hongo$^{2}$, Yasuyuki Uto$^{3}$, Hisatoku Mita$^{4}$, Mitsuhiyo Ishii$^{4}$, Kiyoharu Akimoto$^{5}$, and Akane Kusano$^{6}$}\\
+\ \\
+$^{1}$ Fisheries Resources Institute, Japan Fisheries Research and Education Agency, 25-259 Shimomekurakubo, Samemachi, Hachinohe, Aomori 031-0841, Japan\\
+$^{2}$ Fisheries Resources Institute, Japan Fisheries Research and Education Agency, 2-12-4 Fukuura, Kanazawa, Yokohama, Kanagawa 236-8648, Japan\\
+$^{3}$ \\
+$^{4}$ \\
+$^{5}$ \\
+$^{6}$ \\
+\ \\
+
+$^{\ast}$ Corresponding author\\
+Email: kana.yuki@fra.affrc.go.jp
+
+\newpage
+\flushleft{\textbf{Abstract}\\}
+
+
+\flushleft{\textbf{Keywords}}\\
+
+\newpage
+\begin{linenumbers}
+\setstretch{2}
+\section{Introduction}
+Understanding of spatial distribution of species and underling its mechanism is a essential issue in ecology. Environmental DNA (eDNA) 
+
+
+\ \ \ \ \ \ \ \ \ \
+Accurate species identification of fish eggs and larvae is essential for elucidating the ecology of the early life--history of fish, including the location and timing of fish spawning, hatching, and migration (Ko et al., 2013). Such information can improve the inference and forecasting of fish population size. Morphological characteristics used for species identification have traditionally been the size and oil globules of eggs, and the body shape, pigmentation, and meristic count of larvae (e.g., Matarese and Sandknop, 1984; Ko et al., 2013). However, species identification based on these morphological characteristics leads to species misidentification because these morphological characteristics are likely to overlap among species in early life--history (e.g., Victor et al., 2009; Ko et al., 2013). For example, when we use size of eggs as a morphological measure, we often classify eggs by whether their diameters are greater than or less than a predetermined value. However, because distributions of diameters are likely to overlap among species, some eggs may be erroneously classified as different species. In addition, morphological characteristics can change during developments, so that individuals of the same species at different development stages can be misidentified as a different species (Ko et al., 2013).
+
+\ \ \ \ \ \ \ \ \ \
+Spotted mackerel \textit{Scomber australasicus} and chub mackerel \textit{Scomber japonicus} are small pelagic fish that are widely distributed in the western North Pacific (ca. $\textrm{120}-\textrm{150}^{\circ}$E, Fig. 1; Watanabe and Yatsu, 2006). These species spawn in waters near the Kuroshio Current from winter to summer (e.g., Watanabe, 1970; Watanabe et al., 1999; Watanabe and Yatsu, 2006), after which the adults and their offspring are transported to their feeding ground by the Kuroshio Current (e.g., Watanabe and Nishida, 2002). Because Nishida (2001) suggested that egg diameter differs between the two species, species identification based on egg diameter has been conducted routinely since 2005; eggs smaller than 1.1 mm in diameter were classified as chub mackerel and vice versa. These eggs, which were identified according to this basis, have been used as the indices of the spawning stock biomass of spotted mackerel and chub mackerel for stock assessment. However, the recent egg density of spotted mackerel was considerably high although stock biomass and spawning stock biomass has been low (Yukami et al., 2019). This considerable increase in the egg density of spotted mackerel is likely the result of overestimation because the difference in egg diameter has become ambiguous according to the increase in the egg density of chub mackerel and overlapping the distributions of egg diameters in the two species (Yukami et al., 2019). That is, the boundary between the left tail of the distribution of egg diameters of spotted mackerel and the right tail of the distribution of egg diameters of chub mackerel is clear when egg density of chub mackerel is low. In contrast, this boundary becomes unclear when egg density of chub mackerel increases because the whole of the distribution of egg diameters of chub mackerel becomes large and includes the distribution of egg diameters of spotted mackerel (i.e., the distributions of egg diameters of two species are overlapped). Owing to the possibility of overestimation, it is problematic to use a yearly trend simply estimated from the egg density data as a spawning stock biomass index for stock assessment, which could lead to sources of bias in stock assessment.
+
+\ \ \ \ \ \ \ \ \ \
+There are two straightforward approaches to resolving this issue. The first approach is DNA analysis. However, Egg samples are fixed with formalin to preserve their morphological characteristics and this results in DNA fragmentation and protein cross-linking, which makes DNA extraction difficult or impossible (e.g., Goelz et al., 1985; Impraim et al., 1987). The second approach is to use a mixture distribution of the eggs of chub mackerel and spotted mackerel which contains the temporal changes in egg diameters of two species. However, this is difficult on a practical level owing to complex and interconnected factors, such as spawning times within a given year, age, water temperature, and body condition affect egg diameter, and these may be difficult to obtain by field surveys alone (e.g., spawning times). As another solution, we modelled the species identification error by linking the catchability of egg density of spotted mackerel to the egg density of chub mackerel, because the recent increase of chub mackerel abundance may result in identification error for spotted mackerel egg. That is, an unexpected increase in the egg density of spotted mackerel is virtually replaced by the increase in catchability of the spotted mackerel eggs.
+
+\ \ \ \ \ \ \ \ \ \
+In this paper, we demonstrate a method for reducing identification error by using the state-of-the-art spatio--temporal standardization method (Thorson 2019). Our {new application substantially reduced the bias that would have been caused by the species misidentification of spawning eggs between chub mackerel and spotted mackerel and led to considerable improvement in the stock assessment of spotted mackerel in the western North Pacific. To quantify the effect of species misidentification, we estimated the indices of egg density for spotted mackerel both with and without incorporation of the effect of the egg density of chub mackerel on the catchability of spotted mackerel, using 15 years data of spawning eggs. We then examined how retrospective biases of three measurements of stock abundance (total number of individuals, total stock biomass, and spawning stock biomass; SSB) changed when we used the estimated indices for a stock assessment model. We tested the hypothesis that the retrospective bias should be lower in the spotted mackerel stock assessment with the egg--abundance index standardized by the spatio--temporal model incorporating chub mackerel egg density as a catchability covariate.
+
+\ \\
+
+\section{Materials and Methods}
+\subsection{Data sets}
+\flushleft{\textbf{2.1.1 Survey and data}}\\
+The egg density data with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution in the areas from $\textrm{122}^\circ$E to $\textrm{150}^\circ$E and $\textrm{24}^\circ$N to $\textrm{43}^\circ$N was used. The egg density data set was derived from monthly egg surveys off the Pacific coast of Japan from January to June, 2005--2019 (Takasuka et al., 2008a, 2019). The aim of the surveys was to monitor the egg abundance of major small pelagic fish species, including chub mackerel and spotted mackerel, so that the spatial area and survey month of the data largely covered the major spawning grounds and spawning season. While some sampling locations were fixed, others varied for various reasons (e.g., environmental conditions). Accordingly, the survey design changed slightly each year (Kanamori et al., 2019). Although the sampling efforts were approximately consistent year-round, the efforts tended to be more intensive during early spring; effort was highest in February and decreased gradually thereafter (Takasuka et al., 2008b).
+
+\ \ \ \ \ \ \ \ \ \
+The egg surveys were conducted by 18 prefectural experimental stations or fisheries research institutes and two national research institutes of the Japan Fisheries Research and Education Agency, following the consistent sampling designs, as a part of the stock assessment project. In the surveys, plankton nets were towed vertically from a depth of ~150 m to the surface (if the depth was <150 m, nets were lowered to just above the bottom). This range of depths covers the vertical distributions of eggs of small pelagic fish. During the period from 2005 to 2019, the surveys used a plankton net with a mouth ring diameter of 0.45 m and a mesh size of 0.335 (partially 0.330 mm in 2015) (Takasuka et al., 2017). The samples were fixed with 5\% formalin immediately after collection. In the laboratory, the samples were identified and sorted into eggs and larvae of different small pelagic species, based on the morphological characteristics (e.g., egg shape and size, number of oil globules, segmented yolk, perivitelline space ranging, yolk diameter, oil globule diameter). For the mackerel eggs, the egg diameters were measured to the nearest 0.025 mm by a micrometer for a maximum number of 100 individuals per sample (station or tow). Eggs with diameters $>$1.1 mm were identified as spotted mackerel, whereas those with diameters $leq$1.0 mm were identified as chub mackerel, according to Nishida et al. (2001). For any sample of $>$100 individuals, the proportion of the two species among 100 randomly selected individuals was assumed to be the same for the whole sample. Additionally, the number of eggs per unit area in the water column (number $\mathrm{m^{-2}}$) for each sampling tow was calculated by flow-meter revolutions, flow-meter revolutions per meter tow in the calibration, wire length (m), opening mouth area of the net  ($\mathrm{m^{-2}}$), and wire angle. Then, the arithmetic average of the number of eggs was obtained with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution.
+\textcolor{red}{The mean proportion of the total number of eggs of spotted mackerel against the total number of eggs of \textit{Scomber} was less than 20 \% from 2005 to 2019. Therefore, the effect of the misidentification error that we considered was from chub mackerel on spotted mackerel (i.e., we assumed that the effect of the misidentification error from spotted  mackerel on chub mackerel was small.)} More detailed descriptions of the surveys and data set are provided in previous studies of the reproductive biology of small pelagic fish species (e.g., Takasuka et al. 2008a,b, 2017, 2019).
+
+\subsection{Data analyses}
+\flushleft{\textbf{2.2.1 Indices of egg density}}\\
+In this study, we used the three indices of egg density of spotted mackerel; nominal, chub--, and chub+. The nominal index was the arithmetic mean of egg density for each year. The chub-- index was the estimated egg density by considering sampling effects (i.e., spatio--temporal changes in survey design). The chub+ index was the estimated egg density by considering sampling effects and the effect of egg density of chub mackerel on the catchability of egg density of spotted mackerel. The process for estimating chub-- and the chub+ is described in the following section.
+
+\flushleft{\textbf{2.2.2 Estimation of the indices of egg density}}\\
+To estimate the chub-- and the chub+ indices of egg density by considering sampling effects (i.e., spatio--temporal changes in survey design) as well as the effect of the egg density of chub mackerel on the catchability of egg density of spotted mackerel, we used the multivariate vector autoregressive spatio-temporal (VAST) model (Thorson and Barnett, 2017), which accounts for spatio-temporal changes in survey design, survey effort, and observation rates and can accurately estimate relative local densities at high resolution by standardizing sampling designs (Thorson and Barnett, 2017; Thorson, 2019). The model includes two potential components because it is designed to support delta-models: (i) the encounter probability $p_{i}$ for each sample $i$ and (ii) the expected egg density $d_{i}$ for each sample $i$ when spawning occurs (i.e., egg density is not zero). The encounter probability $p_{i}$ and the expected egg density $d_{i}$ are, respectively, approximated using a logit-linked linear predictor and a log-linked linear predictor as follows (Thorson and Barnett, 2017):
+%\[
+\begin{equation}
+\begin{array}{ll}
+\mathrm{logit}\ p_{i} = \beta_{p}(t_{i}) + \omega_{p}(s_{i}) + \varepsilon_{p}(s_{i}, t_{i}) + \eta_{p}(v_{i}) + \lambda_{p}Q(i)\\
+%\]
+%\[
+\log d_{i} = \beta_{d}(t_{i}) + \omega_{d}(s_{i}) + \varepsilon_{d}(s_{i}, t_{i}) + \eta_{d}(v_{i}) + \lambda_{d}Q(i)
+%\]
+\end{array}
+\end{equation}
+where $\beta(t_{i})$ is the intercept for year $t$, and $\omega(s_{i})$ and $\varepsilon(s_{i}, t_{i})$ are the spatial and spatio--temporal random effects for year $t$ and location $s$, respectively. $\eta(v_{i})$ is the overdispersion random effect of factor $v_{i}$, which is the interaction of year and month.
+$\lambda$ is the effect of the chatchability covariate $Q(i)$:
+\[
+%Q(i) = \mathrm{log} (\mathrm{chub\,mackerel\,egg\,density}(s_{i})+0.1).
+Q(i) = \mathrm{log} (d_{chub}(s_{i})+0.1).
+\]
+That is, this term considers the effect of species misidentification between chub mackerel and spotted mackerel; as mentioned earlier, we suspected overestimation of egg density of spotted mackerel because the difference in egg diameter has become ambiguous according to increase in egg density of chub mackerel and the distributions of egg diameters between species have overlapped (Yukami et al., 2019). The constant 0.1 was added because $\mathrm{log} 0$ (i.e., no chub mackerel eggs) is undefined, and the same result was obtained when using $1$ in place of $0.1$.
+
+\ \ \ \ \ \ \ \ \ \
+The probability density function of $\omega(\cdot)$ is a multivariate normal distribution $\mathrm{MVN}(0, \mathbf{R})$, where the variance--covariance matrix $\mathbf{R}$ is a Mat\'{e}rn correlation function. The probability density function of $\varepsilon(s_{i}, t_{i})$ is
+\[\
+\varepsilon(\cdot, t_{i}) \sim \left\{
+\begin{array}{ll}
+\mathrm{MVN}(0, \mathbf{R}), &if \;t = 1\\
+\mathrm{MVN}(\rho_{\varepsilon} \varepsilon(\cdot, t-1_{i}), \mathbf{R}), &if \;t > 1 \\
+\end{array} \right.
+. \]
+Here, we set $\rho_{\varepsilon} = 0$ under the assumption that the year was independent. Therefore, the probability density function of $\eta(v_{i})$ is $\eta(v_{i}) \sim \mathrm{N}(0, 1)$.
+
+\ \ \ \ \ \ \ \ \ \
+For computational reasons, the spatio-temporal variation $\varepsilon_{p}(s_{i}, t_{i})$ was approximated as being piecewise constant at a fine spatial scale. We used a k-means algorithm to identify 200 locations (termed ``knots'') to minimize the total distance between the location of sampling data (Thorson et al., 2015) using R-INLA software (Lindgren, 2012). The number of knots was increased to the greatest extent possible, and similar results were obtained for low knots (= 100; Akaike information criterion [AIC] = 6773.01) and high knots (= 200; AIC = 6676.25).
+
+\ \ \ \ \ \ \ \ \ \
+Parameters in the VAST model were estimated using the VAST package (Thorson et al., 2015,2016a) in R 3.6.1 (R Development Core Team, 2019). Bias-correction for random effects (Thorson and Kristensen, 2016) was applied when estimating the derived parameters. We evaluated the model diagnostics plots and confirmed that there were no serious problems with the model. The relative egg density in year $t$ at location $s$, $\hat{d}(s, t)$ and the index of egg density in year $t$, $\hat{D}(t)$, were estimated using the predicted values for random effects as follows (Thorson et al., 2017):
+\newpage
+\[
+\hat{d}(s, t) = \mathrm{logit}^{-1}[\beta_{p}(t_{i}) + \omega_{p}(s_{i}) + \varepsilon_{p}(s_{i}, t_{i}) + \eta_{p}(v_{i})]
+\]
+\[
+\times \exp[\beta_{d}(t_{i}) + \omega_{d}(s_{i}) + \varepsilon_{d}(s_{i}, t_{i}) + \eta_{d}(v_{i})],
+\]
+\[\hat{D}(t) = \sum_{s} a(s) \times \hat{d}(s, t)
+\]
+
+%\[
+%\begin{split}
+%\hat{d}(s, t) = \mathrm{logit}^{-1}[\beta_{p}(t_{i}) + \omega_{p}(s_{i}) + \varepsilon_{p}(s_{i}, t_{i}) + \eta_{p}(v_{i}) + \lambda_{p}Q(i)]\\
+ %\times \exp[\beta_{d}(t_{i}) + \omega_{d}(s_{i}) + \varepsilon_{d}(s_{i}, t_{i}) + \eta_{d}(v_{i}) + \lambda_{d}Q(i)],
+% \end{split}
+%\]
+%\[\hat{D}(t) = \sum_{s} a(s) \times \hat{d}(s, t)
+%\]
+where $a (s)$ is the area of location $s$. It is noteworthy that  the effect of the catchability covariate $\lambda Q(i)$ in the above equation (1) is removed in the calculation of densities. This means that the abundance index can be derived from the model by removing the bias from the contamination of spotted mackerel eggs with chub mackerel eggs.
+
+\flushleft{\textbf{2.2.3 Estimation of stock abundance}}\\
+To examine the validity of the three indices (i.e., nominal index, chub- index, and chub+ index), we estimated the three measurements of stock abundance (total number of individuals, total stock biomass, and SSB) from 1995 to 2018 using a tuned virtual population analysis (VPA). This model is an age-based cohort analysis for estimating the historical abundance and fishing mortality rates from catch-at-age data and has been applied to spotted mackerel in Japan (Yukami et al., 2019). In addition to the three indices of egg density, we used catch-at-age, weight-at-age (not constant over time), maturity-at-age (constant over time) for four age categories (1 to 3, and 4+), the natural mortality coefficient, and a recruitment index following stock assessment in Japan (Yukami et al., 2019). The fishing mortality coefficients other than the terminal age in the terminal year were estimated under the assumption that the selectivity in the latest year was equal to the average selectivity of the prior 5 years (Ichinokawa and Okamura, 2014; Mori and Hiyama, 2014). We confirmed that this assumption did not change our results when using the average selectivity of the prior 3 years as the selectivity in the latest year. The fishing mortality coefficient at each age in the terminal year was estimated by a maximum likelihood method as follows:
+\[\sum_{k} \sum_{y} \left[ \frac{\{\mathrm{log}(I_{k,y})-\mathrm{log}(q_{k}X_{k,y})\}^2} {2\sigma^{2}} - \mathrm{log}(\frac{1} {\sqrt{2\pi\sigma^{2}}}) \right]
+,\]
+where $I_{k,y}$ is the value of index $k$ in year $y$, $q_{k}$ is a proportionality constant, $X_{k,y}$ is the abundance estimate in VPA for index $k$ (i.e., recruitment, and the three indices of egg density), $\sigma^2$ is the variance in fitting the abundance estimate to the index, and $y_{k}$ is the first year of index $k$.
+
+\flushleft{\textbf{2.2.4 Retrospective analysis}}\\
+Stock abundance in the terminal year estimated by VPA is notoriously inaccurate and imprecise compared with historical abundance estimates (Okamura et al. 2017). One of the most serious problems is that the stock abundance estimate in the terminal year has temporally systematic bias, i.e., retrospective bias (Hurtado-Ferro et al. 2015). Retrospective analysis is therefore a useful method for detecting such a systematic bias in stock abundance estimate in the terminal year. Dropping the most recent year's data sequentially and then comparing the estimates from a full-year data model and removed data model reveals presence or absence of systematic bias (Mohn 1999). Herein, we conduct a retrospective analysis to evaluate the relative goodness of estimation of stock abundance for} three indices of egg density.
+
+\ \ \ \ \ \ \ \ \ \
+To examine improvements in estimations of the three measurements of stock abundance when using the estimated indices of egg density from the VAST model and considering the effect of the chub mackerel, we performed a retrospective analysis by sequentially removing the five most recent years of data from the full data set. Retrospective analysis is usually used in stock assessment models such as VPA to examine the reliability and predictability of stock assessments (e.g., Mohn, 1999; Hashimoto et al., 2018). We calculated Mohn's rho to estimate the biases of the indices of egg density as follows (Mohn, 1999):
+\[\rho = \frac{1}{c} \sum_{i}^{c} \left(\frac{B_{y-i}^R - B_{y-i}} {B_{y-i}} \right)
+,\]
+where $B_{y-i}$ is the value of the year $y-i$ estimate using the full data and $B_{y-i}^R$ is the estimate using the data up to year $y-i$. $c$ is the maximum number of removed years (i.e., $c = 5$). A positive $\rho$ means that the estimate in the terminal year tends to be positively biased on average, and vice versa. Moreover, a $\rho$ close to $0$ means no serious retrospective bias and greatly improved estimation of the stock abundance.
+
+\ \\
+\section{Results}
+\flushleft{\textbf{3.1 Temporal trend in the indices of egg density}}\\
+When comparing the standardized indices (i.e., chub- and chub+ indices) to the nominal index, the standardized indices reduced temporal fluctuation (Fig. 2). Whereas the nominal index increased substantially in 2018, the standardized indices were reduced to a considerable degree. Moreover, the standardized indices for some years, such as 2008, 2009, and 2012, were increased.
+
+\ \ \ \ \ \ \ \ \ \
+The model with the effect of chub mackerel egg density on the catchability of spotted mackerel was more parsimonius than the model without the effect of chub mackerel based on AIC (chub+, AIC = 8250.12; chub--, AIC = 8978.81). The coefficient of the effect of chub mackerel on the catchability of spotted mackerel, $\lambda$, indicates a positive effect ($\lambda$ = 0.17). The estimated index with the effect of chub mackerel effect reached a peak in 2008 and decreased gradually thereafter. The value of this index in 2019 was the lowest since 2005 (Fig. 2).
+
+\flushleft{\textbf{3.2 Spatial distribution of the relative egg density}}\\
+The relative egg density with the effect of chub mackerel was high off the coast of Kyushu, Shikoku, and the Izu Islands (Fig. 3). In addition, the relative egg density was slightly high off the coast of the Tohoku region. These patterns were consistent during the study period. The relative egg density did not clearly increase or decrease in any area during the study period.
+
+\flushleft{\textbf{3.3 Retrospective analysis}}\\
+Recent estimated values of stock abundance (i.e., total numbers of individuals, total biomass, and SSB) differed depending on the indices used, whereas the directions of retrospective bias were sometimes consistent depending on the indices used (Fig. 4). In all the three measurements of stock abundance, the recent estimated values were higher when using the nominal and estimated index without the effect of chub mackerel than using the estimated index with the effect of chub mackerel. The directions of retrospective bias were always positive, independent of the indices used.
+
+\ \ \ \ \ \ \ \ \ \
+For all the three measurements of stock abundance (i.e., total numbers of individuals, total biomass, and SSB), retrospective biases clearly improved when using the estimated index with the effect of chub mackerel (Table 1). Values of Mohn's rho, which represents the magnitude and direction of retrospective bias, were similar when using the nominal index and the estimated index without the effect of chub mackerel (Table 1). In contrast, Mohn's rho decreased when using the estimated index with the effect of chub mackerel. The directions of the retrospective bias did not change depending on the indices used because the values of Mohn's rho were always positive.
+
+
+\ \\
+\section{Discussion}
+We modelled the species identification error by linking the catchability of spotted mackerel eggs to the egg density of chub mackerel. We found that the model incorporating the effect of the egg density of chub mackerel was better, based on AIC (Fig. 2). In addition, the model showed that the egg density of chub mackerel had a positive effect on the catchability of spotted mackerel. These results suggest the necessity of incorporating the effect of the egg density of chub mackerel when standardizing the egg density of spotted mackerel.
+
+\ \ \ \ \ \ \ \ \ \
+Whereas the nominal index increased substantially in 2018, the standardized indices of chub- and chub+ were similarly reduced (Fig. 2). The reduction in both standardized indices, irrespective of whether the effect of the egg density of chub mackerel was incorporated, may be explained by spatio--temporal changes in survey design, survey effort, and observation rate by the VAST model. Indeed, the surveys in 2018 were conducted. by chance, at the site with a high egg density of spotted mackerel (Yukami et al., 2019), which was spatially smoothed by considering the spatial correlation using the VAST model. Hence, we think that the nominal index in 2018 included both species identification bias and spatio--temporal bias from the survey.
+
+\ \ \ \ \ \ \ \ \ \
+The retrospective biases in all the three measurements of stock abundance were clearly improved when using the estimated index that incorporates the effect of chub mackerel; the magnitude of the retrospective biases decreased by about half compared with those for the other indices (Fig. 4 and Table 1). These results suggest that our new application is effective for reducing the bias in species misidentification and greatly improves stock estimation, especially for pelagic eggs, which have relatively minor differences in shape and size for species identification.
+\textcolor{red}{The samples are usually fixed with formalin to preserve their morphological characteristics, which makes DNA extraction difficult or impossible due to DNA fragmentation and protein cross-linking (e.g., Goelz et al., 1985; Impraim et al., 1987).} Accordingly, samples collected prior to the development of DNA techniques cannot used for DNA analysis. In contrast, our new method requires only the geographic locations and ``prior-" information, such as the species name (which can be based on morphological characteristics), to use various data types, such as survey data for eggs and larvae collected in the ICES area. Thus, our method should be of great benefit in fisheries science.
+
+\ \ \ \ \ \ \ \ \ \
+Our results can play an important role in the actual management of spotted mackerel. The stock status and management of this species have received substantial attention in Japan because this species is one of the nine TAC (total allowable catch) species, whose catches are strictly managed according to output control. In fact, a new harvest control rule based on maximum sustainable yield (MSY) was implemented in 2020 (Yukami et al. 2020). The stock abundance of spotted mackerel has been decreasing in recent years, and positive retrospective bias caused overestimates of abundance in the terminal year in a previous stock assessment using an unstandardized index of spawning eggs (Yukami et al. 2019). This indicates that the allowable biological catch (ABC) was also overestimated, and this may have led to overfishing.
+The stock assessments with the nominal and chub- indices would estimate, respectively, 140 and 105 thousand tons as ABC in 2020, whilst that with the chub+ index would derive 38 thousand tons as ABC in 2020. The present study found that the retrospective bias was considerably reduced in the stock assessment with the chub+ index and this approach would therefore contribute to the derivation of an adequate ABC. Although the current status is overfishing and overfished (Yukami et al. 2020), it is expected that the Pacific stock of spotted mackerel will show a recovery to a level that produces the MSY by using our assessment method and the new Harvest Control Rules.
+
+\ \ \ \ \ \ \ \ \ \
+Although detailed information on spawning grounds is necessary for understanding fluctuations in recruitment as well as for providing a basis for stock management, prior data for spotted mackerel has not been reliable. For example, some studies have reported that the area around the Izu Islands may not be a suitable spawning ground for spotted mackerel because few eggs have been observed (Yukami et al. 2019). In contrast, it is possible that the spotted mackerel spawns around the Izu Islands because the estimated hatch day and the spatial distribution of spotted mackerel at the Kuroshio--Oyashio transition area were similar to those of chub mackerel, which spawns around mainly the Izu Islands (Takahashi et al., 2010). The present study showed that the relative egg density, which was estimated using the better model, was equally high off the coast of Kyushu, Shikoku, and the Izu Islands (Fig. 3), providing direct evidence that the area around the Izu Islands are also a major spawning ground of spotted mackerel. It is possible that spotted mackerel spawn in the area around the Izu Islands because they are not sensitive to rising water temperatures and they are generally distributed farther south than chub mackerel (Mitani et al., 2002). Indeed, although both spotted mackerel and chub mackerel spawn at the same time around the Izu Islands (Tanoue et al., 1960; Hanai and Meguro, 1997), the reproductive phenology of chub mackerel has changed due to rising sea surface temperatures associated with climate change; since 2000, chub mackerel migrate to their feeding ground earlier and spawn father northward (Kanamori et al., 2019).
+
+\ \ \ \ \ \ \ \ \ \
+Understanding migration patterns is necessary for conducting stock assessments (Crossin et al., 2017). It has been assumed that the spawning grounds of spotted mackerel change with age; individuals migrate from around the Izu Islands to the Kuroshio--Oyashio transition area to feed before spawning at 2 years of age (Nishida et al., 2000; Kawabata et al. 2008). Adults that have spawned gradually migrate westward, using the spawning grounds off the coast of Kyushu and Shikoku (Hanai, 1999; Nashida et al., 2006). Although the number of recruits were particularly high in 2004 and 2009 (Yukami et al., 2019), we did not find evidence for an increase in the relative egg density around the Izu Islands in 2006 and in 2011 or the other spawning grounds after 2007 and 2012 (Fig. 3). One explanation for this is that the migration range of spotted mackerel is narrower than we assumed. Previous studies have reported that spotted mackerel remains around the Izu Islands and off the coast of Shikoku (Hanai, 1999; Nashida et al., 2006). Another explanation is that part of a strong year may remain in another area due to the expansion of the spatial distribution resulting from an increase number in recruitments. For example, Kawabata et al. (2008) reported that the 2004 year class migrated for feeding and overwintering until at least 3 years old over the Emperor Seamounts (around $\textrm{165}-\textrm{170}^{\circ}$E and $\textrm{30}-\textrm{55}^{\circ}$N). Testing these hypotheses will be the subject of future research and should improve our understanding of the migratory patterns of the spotted mackerel, which in turn should improve stock assessment and management.
+\ \\
+
+\ \\
+\flushleft{\textbf{\Large{Conclusion}}}\\
+This study showed that indices of egg density of spotted mackerel, which were standardized using a spatio--temporal model, reduced temporal fluctuation. In particular, the standardized indices in 2018 were reduced to a considerable degree compared with the nominal index. The model incorporating the effect of chub mackerel egg density on the catchability of spotted mackerel (i.e., the model incorporating species misidentification bias) was the better model according to the AIC. In addition, the retrospective bias decreased by about half when using the egg density index from the better model. These results suggest that incorporating species misidentification bias is an essential process for improving stock assessment.
+
+\ \\
+%\setstretch{1}
+\flushleft{\textbf{\Large{Acknowledgments}}}\\
+This research was financiallysupportted by the grants from the Japan Society for the Promotion of Science (JSPS) (19K15905, 20392904).
+\ \\
+
+%\flushleft{\textbf{\Large{Authorship}}}\\
+%YK conceived of the research idea. AT and MW conducted field sampling. YK, SN, and HO designed statistical analyses. YK and SN wrote programs and performed the analyses. YK wrote the manuscript with input from all co-authors' comments.
+\ \\
+
+%\setstretch{1}
+\flushleft{\textbf{\Large{Literature cited}}}\\
+\hangindent=30pt
+\noindent
+Crossin, G.T., Cooke, S.J., Goldbogen, J.A., Phillips, R.A. 2014. Tracking fitness in marine vertebrates: current knowledge and opportunities for future research. Mar. Ecol. Prog. Ser. 496:1-17.
+
+\hangindent=30pt
+\noindent
+Elphick, C.S. 2008. How you count counts: the importance of methods research in applied ecology. J. Appl. Ecol. 45:1313-1320.
+
+\hangindent=30pt
+\noindent
+Garcia-Vazquez, E., Machado-Schiaffino, G., Campo ,D., Juanes, F. 2012. Species misidentification in mixed hake fisheries may lead to overexploitation and population bottlenecks. Fish. Res. 114:52-55.
+
+\hangindent=30pt
+\noindent
+Goelz, S.E., Hamilton, S.R., Vogelstein, B. 1985. Purification of DNA from formaldehyde fixed and paraffin embedded human tissue. Biochem. Biophys. Res. Commun. 130:118–126.
+
+\hangindent=30pt
+\noindent
+Hashimoto, M., Nishijima, S., Yukami, R., Watanabe, C., Kamimura, Y., Furuichi, S., Ichinokawa, M., Okamura, H. 2019. Spatiotemporal dynamics of the Pacific chub mackerel revealed by standardized abundance indices. Fish. Res. 219:105315.
+
+\hangindent=30pt
+\noindent
+Hashimoto, M., Okamura, H., Ichinokawa, M., Hiramatsu, K., Yamakawa, T. 2018. Impacts of the nonlinear relationship between abundance and its index in a tuned virtual population analysis. Fish. Sci. 84:335-347.
+
+\hangindent=30pt
+\noindent
+Hurtado-Ferro, F., Szuwalski, C.S., Valero. J.L., Andderson. S.C., Cunningham, C.J., Johnson, K.F., Licandeo, R.L., McGilliard, C.R., Monnahan, C.C., Muradian, M.L., Ono, K., Vert-Pre, K.A., Whitten, A.R., Punt, A.E. 2015. Looking in the review mirror: bias and retrospective patterns in integrated, age-structured stock assessment models. ICES J. Mar. Sci. 72:99-110.
+
+\hangindent=30pt
+\noindent
+Ichinokawa, M., Okamura, H. 2014. Review of stock evaluation methods using VPA for fishery stocks in Japan: implementation with R. Bull. Jpn. Soc. Fish. Oceanogr. 78:104-113 (in Japanese with English abstract).
+
+\hangindent=30pt
+\noindent
+Impraim, C.C., Saiki. R.K., Erlich, H.A., Teplitz, R.L. 1987. Analysis of DNA extracted from formalin-fixed, paraffin-embedded tissues by enzymatic amplification and hybridization with sequence-specific oligonucleotides. Biochem. Biophys. Res. Commun. 142:710–716.
+
+\hangindent=30pt
+\noindent
+Kanamori, Y., Takasuka, A., Nishijima, S., Okamura, H. 2019. Climate change shifts the spawning ground northward and extends the spawning period of chub mackerel in the western North Pacific. Mar. Ecol. Prog. Ser. 624:155-166.
+
+\hangindent=30pt
+\noindent
+Ko, H.L., Wang, Y.T., Chiu, T.S., Lee, M.A., Leu, M.Y., Chang, K.Z. et al. 2013. Evaluating the accuracy of morphological identification of larval fishes by applying DNA barcoding. PLoS ONE 8:e53451.
+
+\hangindent=30pt
+\noindent
+Lindgren, F. 2012. Continuous domain spatial models in R-INLA. ISBA Bull. 19:14-20.
+
+\hangindent=30pt
+\noindent
+MacKenzie, D.I., Nichols, J.D., Lanchman, G.B., Droege, S., Royle, J.A., Langtimm, C.A. 2002. Estimating site occupancy rates when detection probabilities are less than one. Ecology 83:2248-2255.
+
+\hangindent=30pt
+\noindent
+Marko, P.B., Lee, S.C., Rice, A.M., Gramling, J.M., Fitzhenry, T.M., McAlister, J.S., Harper, G.R., Moran, A.L. 2004. Mislabelling of a depleted reef fish. Nature 430:309-310.
+
+\hangindent=30pt
+\noindent
+Matarese, A.C., Spies, I.B., Busby, M.S., Orr, J.W. 2011. Early larvae of \textit{Zesticelus profundorum} (family Cottidae) identified using DNA barcording. Ichthyol. Res. 58: 170-174.
+
+\hangindent=30pt
+\noindent
+Mohn, R. 1999. The retrospective problem in sequential population analysis: an investigation using cod fishery and simulated data. ICES J. Mar. Sci. 56:473-488.
+
+\hangindent=30pt
+\noindent
+Mori, K., Hiyama, Y. 2014. Stock assessment and management for walleye pollock in Japan. Fish. Sci. 80:161-172.
+
+\hangindent=30pt
+\noindent
+Nishida, H., Wada, T., Oozeki, Y., Sezaki, K., Saito, M. 2001. Possibility of identifying chub mackerel and spotted mackerel by measuring diameter of mackerel eggs. Nippon Suisan Gakkaishi, 67: 102-104.
+
+\hangindent=30pt
+\noindent
+Okamura, H., Yamashita, Y., Ichinokawa, M. 2017. Ridge virtual population analysis to reduce the instability of fishing mortalities in the terminal year. ICES J. Mar. Sci. 74:2427-2436.
+
+\hangindent=30pt
+\noindent
+R Development Core Team, 2019. R: a language and envi- ronment for statistical computing. R Foundation for Sta- tistical Computing, Vienna.
+
+\hangindent=30pt
+\noindent
+Takahashi, M., Takagi, K,, Kawabata, A., Watanabe, C., Nishida, H., Yamashita, N., Mori, K., Suyama, S., Nakagami, M., Ueno, Y., Saito, M. 2010. Estimated hatching season of the Pacific stock of chub mackerel \textit{Scomber japonicus} and spotted mackerel \textit{S. australasicus} in 2007. Fisheries biology and oceanography in the Kuroshio 11:49-54 (in Japanese).
+
+\hangindent=30pt
+\noindent
+Takasuka, A., Kubota, Hm., Oozeki, Y. 2008a. Spawning overlap of anchovy and sardine in the western North Pacific. Mar. Ecol. Prog. Ser. 366:231-244.
+
+\hangindent=30pt
+\noindent
+Takasuka, A., Oozeki, Y., Kubota, H. 2008b. Multi-species regime shifts reflected in spawning temperature optima of small pelagic fish in the western North Pacific. Mar. Ecol. Prog. Ser. 360:211-217.
+
+\hangindent=30pt
+\noindent
+Takasuka, A., Tadokoro, K., Okazaki, Y., Ichikawa, T., Sugisaki, H., Kuroda, H., Oozeki, Y. 2017. In situ filtering rate vari- ability in egg and larval surveys off the Pacific coast of Japan: Do plankton nets clog or over-filter in the sea? Deep-Sea Res. I 120:132−137.
+
+\hangindent=30pt
+\noindent
+Takasuka, A., Yoneda, M., Oozeki, Y. 2019. Density depend- ence in total egg production per spawner for marine fish. Fish. Fish. 20:125−137.
+
+\hangindent=30pt
+\noindent
+Thorson, J.T. 2019.  Guidance for decisions using the Vector Autoregressive Spatio-Temporal (VAST) package in stock, ecosystem, habitat and climate assessments. Fish. Res. 210:143-161.
+
+\hangindent=30pt
+\noindent
+Thorson, J.T., Barnett, L.A.K. 2017. Comparing estimates of abundance trends and distribution shifts using single- and multispecies models of fishes and biogenic habitat. ICES J. Mar. Sci. 74:1311−1321.
+
+\hangindent=30pt
+\noindent
+Thorson, J.T., Kristensen, K. 2016. Implementing a generic method for bias correction in statistical models using ran- dom effects, with spatial and population dynamics exam- ples. Fish. Res. 175: 66–74.
+
+\hangindent=30pt
+\noindent
+Thorson, J.T., Shelton, A.O., Ward, E.J., Skaug, H.J. 2015. Geostatistical delta-generalized linear mixed models improve precision for estimated abundance indices for West Coast groundfishes. ICES J. Mar. Sci. 72:1297−1310.
+
+\hangindent=30pt
+\noindent
+Victor, B.C., Hanner, R., Shivji, M., Hyde, J., Caldow, C. 2009. Identification of the larval and juvenile stages of the cubera snapper, \textit{Lutignus cyanopterus}, using DNA barcoding. Zootaxa 2215:24-36.
+
+\hangindent=30pt
+\noindent
+Watanabe, C., Hanai, T., Meguro, K., Ogino, R., Kubota, Y., Kimura, R. 1999. Spawning biomass estimates of chub mackerel \textit{Scomber japonicus} of Pacific subpopulation off central Japan by a daily egg production method. Nippon Suisan Gakkaishi 65: 695-702 (in Japanese with English abstract).
+
+\hangindent=30pt
+\noindent
+Watanabe, C., Nishida, H. 2002. Development of assessment techniques for pelagic fish stocks: applications of daily egg production method and pelagic trawl in the northwestern Pacific Ocean. Fish. Sci. 68:97-100.
+
+\hangindent=30pt
+\noindent
+Watanabe, C., Yatsu, A. 2006. Long-tem changes in maturity at age of chub mackerel (\textit{Scomber japonicus}) in relation to population declines in the waters off northeastern Japan. Fish. Res. 78:323-332.
+
+\hangindent=30pt
+\noindent
+Watanabe, T., 1970. Morphology and ecology of early stages of life in Japanese common mackerel, \textit{Scomber japonicus} HOUTTUYN, with special reference to fluctuation of population. Bull. Tokai Reg. Fish. Res. Lab. 62:1-283 (in Japanese with English abstract).
+
+\hangindent=30pt
+\noindent
+Williams, B.K., Nichols, J.D., Conroy, M.J. 2002. Analysis and management of animal population. Academic Press, New York.
+
+\hangindent=30pt
+\noindent
+Yukami, R., Isu, S., Watanabe, C., Kamimura, Y., Furuichi, S. 2019. Stock assessment and evaluation for the Pacific stock of spotted mackerel (fiscal year 2018). In: Marine fisheries stock assessment and evaluation for Japanese waters (2018/ 2019). Fisheries Agency and Fisheries Research Agency of Japan, Yokohama, Kanagawa, p 248−278 (in Japanese).
+
+\hangindent=30pt
+\noindent
+Yukami, R., Isu. S., Kamimura, Y., Furuichi, S., Watanabe, R., Kanamori, Y. 2020. Stock assessment and evaluation for the Pacific stock of spotted mackerel (fiscal year 2019). In: Marine fisheries stock assessment and evaluation for Japanese waters (2019/ 2020). Fisheries Agency and Fisheries Research Agency of Japan, Yokohama, Kanagawa (in Japanese).
+
+\newpage
+\flushleft{\textbf{\Large{Captions}}}\\
+\flushleft{\textbf{Fig. 1}} Study area. Spotted mackerel \textit{Scomber australasicus} in the western North Pacific spawns around Kyushu, Shikoku, and the Izu Islands in Japan. Adults and their offspring are then transported to their feeding ground by the Kuroshio Current.
+\ \\
+\flushleft{\textbf{Fig. 2}} Temporal trends in indices of egg density. The gray line represents the scaled nominal index, the blue line represents the estimated index without the effect of chub mackerel, and the red line represents the estimated index with the effect of chub mackerel. Vertical bars are 95\% confidence intervals of the estimated indices.
+\ \\
+\flushleft{\textbf{Fig. 3}} Temporal changes in the spatial distribution of relative egg density, \textcolor{red}{as} estimated using the model with the effect of chub mackerel.
+\ \\
+\flushleft{\textbf{Fig. 4}} Retrospective patterns of total numbers of individuals, total biomass, and spawning stock biomass (SSB). Color differences denote differences in sequentially removing data for the five most recent years (blue, light blue, green, orange, and red indicate removal of data for years 1 to 5 years, respectively) from the full data set (gray).
+\ \\
+
+
+
+\end{linenumbers}
+\end{document}
