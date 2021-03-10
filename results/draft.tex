@@ -85,6 +85,14 @@ The predicted spatial distribution of four fish form our model reduced
 
 
 \subsection{A general model to estimate species distribution from eDNA}
+To estimate 
+
+\[
+\mathrm{logit}(p_{1}(s_{i})) = \alpha_{1} + \beta(s_{i}) + \theta(s_{i}) + u_{1}(s_{i})
+\]
+\[
+\mathrm{logit}(p_{2}(s_{i})) = \alpha_{2} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{2}(s_{i})
+\]
 %\flushleft{\textbf{2.1.1 Survey and data}}\\
 %The egg density data with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution in the areas from $\textrm{122}^\circ$E to $\textrm{150}^\circ$E and $\textrm{24}^\circ$N to $\textrm{43}^\circ$N was used. The egg density data set was derived from monthly egg surveys off the Pacific coast of Japan from January to June, 2005--2019 (Takasuka et al., 2008a, 2019). The aim of the surveys was to monitor the egg abundance of major small pelagic fish species, including chub mackerel and spotted mackerel, so that the spatial area and survey month of the data largely covered the major spawning grounds and spawning season. While some sampling locations were fixed, others varied for various reasons (e.g., environmental conditions). Accordingly, the survey design changed slightly each year (Kanamori et al., 2019). Although the sampling efforts were approximately consistent year-round, the efforts tended to be more intensive during early spring; effort was highest in February and decreased gradually thereafter (Takasuka et al., 2008b). 
 
@@ -96,7 +104,10 @@ The predicted spatial distribution of four fish form our model reduced
 \subsection{An application to a eDNA and catch data in Tokyo Bay}
 \flushleft{\textbf{2.2.1 eDNA data}}\\
 \flushleft{\textbf{2.2.1.1 Field survey}}\\
-Field surveys were conducted at 14 sites in Tokyo Bay from April to December in 2018 using R/V Fusanami or R/V Fusami-maru of Chiba Prefecture and R/V Enoshima-maru of Kanagawa Prefecture (Fig. 1). In each station, seawater for eDNA analysis and environmental data were simultaneously collected. For eDNA analysis, two litter of bottom seawater was collected using a Niskin water sampler and were separated for two 1L samples. Each samples filtered glass fiber membrane GF/F (0.7 $\mu m$ pore size; Cytiva, Sheffield, UK) onboard and then the filters were frozen on a block of dry ice. These frozen filters were transported and stored at $-30^\circ$ in the laboratory until eDNA extraction. To lower the levels of cross-contamination, equipments for eDNA sampling were changed new one or washed in each site. During sampling the bottom seawater, water temperature, salinity, pH, and dissolved oxygen (DO) were measured by CTD (メーカー).
+Field surveys were conducted by prefectural experimental station in Chiba, following the consistent sampling design at 14 sites in Tokyo Bay from April to December in 2018 (Fig. 1). 
+%Field surveys were conducted at 14 sites in Tokyo Bay from April to December in 2018 using R/V Fusanami or R/V Fusami-maru of Chiba Prefecture and R/V Enoshima-maru of Kanagawa Prefecture (Fig. 1). 
+In each sites, seawater and environmental data were simultaneously collected. For eDNA analysis, two litter of bottom seawater was collected using a Niskin water sampler, and then it was separated for two 1L samples for replicate. Each samples filtered glass fiber membrane GF/F (0.7 $\mu m$ pore size; Cytiva, Sheffield, UK) onboard and then the filters were frozen on a block of dry ice. These frozen filters were stored at $-30^\circ$ in the laboratory until eDNA extraction. To lower the levels of cross-contamination, equipments for eDNA sampling were changed new one or washed in each sites. During sampling the bottom seawater, seawater temperature, salinity, pH, and dissolved oxygen (DO) at the same depth of seawater sampling for eDNA were measured by CTD (メーカー).
+%The egg surveys were conducted by 18 prefectural experimental stations or fisheries research institutes and two national research institutes of the Japan Fisheries Research and Education Agency, following the consistent sampling designs, as a part of the stock assessment project.
 
 \flushleft{\textbf{2.2.1.1 Laboratory experiments}}\\
 In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were conducted. Total eDNA was extracted from the frozen filters using a DNeasy Blood and Tissue Kit (Qiagen, Hilden, Germany) following Yamamoto et al. 2019. Mitochondorial 12S rRNA gene was amplified using MiFish universal primers referring to Miya et al. 2015 with slight modification. The details was shown in Hongo et al. (受理されてないようだったら書くしかない).  eDNA sequence were ....
@@ -106,6 +117,7 @@ In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were condu
 A part of catch statistics of small-scale bottom trawl fisheries recorded by several representative boats of Chiba Prefecture were provided by Chiba Prefecture. This data included date, geographic location, efforts (number of tows), gear, and catch weight (kg) in each fish. Almost of all gear was beam trawl although dredge net also used. The species which also detected by eDNA was \textit{Conger myriaster} (マアナゴ), \textit{Kareius bicoloratus} (イシガレイ), \textit{Lateolabrax japonicus} (スズキ), and \textit{Konosirus punctatus} (コノシロ). Thus, we estimated the spatial distribution of these four species using the eDNA-IDM. \textcolor{red}{マコガレイ，カマス類，クロダイ，イシモチ類も解析できる？？}
 
 \flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
+To estimate the spatial distribution of four focal species from eDNA and catch data by considering uncertainties caused by environmental factors, we fitted the model (equation 1) to the presence/absence data of eDNA and of catch data collected in Tokyo Bay as follows:
 
 
 
