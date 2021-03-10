@@ -96,14 +96,23 @@ The predicted spatial distribution of four fish form our model reduced
 \subsection{An application to a eDNA and catch data in Tokyo Bay}
 \flushleft{\textbf{2.2.1 eDNA data}}\\
 \flushleft{\textbf{2.2.1.1 Field survey}}\\
-Field surveys were conducted at 14 sites in Tokyo Bay from April to December in 2018 using R/V Fusanami or R/V Fusami-maru of Chiba Prefecture and R/V Enoshima-maru of Kanagawa Prefecture (Fig. 1). In each station, seawater for eDNA analysis and environmental data were simultaneously collected. For eDNA analysis, two litter of bottom seawater was collected using a Niskin water sampler and were separated for two 1L samples. Each samples filtered glass fiber membrane GF/F (0.7 $\mu m$ pore size; Cytiva, Sheffield, UK) onboard and then the filters were frozen on a block of dry ice. These frozen filters were transported and stored at $-30^\circ$ in the laboratory until eDNA extraction. To lower the levels of cross-contamination, equipments for eDNA sampling were changed new one or washed in each site. During sampling the bottom seawater, water temperature, salinity, pH, and dissolved oxygen (DO) were measured by CTD (メーカー？).
+Field surveys were conducted at 14 sites in Tokyo Bay from April to December in 2018 using R/V Fusanami or R/V Fusami-maru of Chiba Prefecture and R/V Enoshima-maru of Kanagawa Prefecture (Fig. 1). In each station, seawater for eDNA analysis and environmental data were simultaneously collected. For eDNA analysis, two litter of bottom seawater was collected using a Niskin water sampler and were separated for two 1L samples. Each samples filtered glass fiber membrane GF/F (0.7 $\mu m$ pore size; Cytiva, Sheffield, UK) onboard and then the filters were frozen on a block of dry ice. These frozen filters were transported and stored at $-30^\circ$ in the laboratory until eDNA extraction. To lower the levels of cross-contamination, equipments for eDNA sampling were changed new one or washed in each site. During sampling the bottom seawater, water temperature, salinity, pH, and dissolved oxygen (DO) were measured by CTD (メーカー).
 
 \flushleft{\textbf{2.2.1.1 Laboratory experiments}}\\
-In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were conducted. Total eDNA was extracted from the frozen filters using a DNeasy Blood and Tissue Kit (Qiagen, Hilden, Germany) following Yamamoto et al. 2019. Mitochondorial 12S rRNA gene was amplified using MiFish universal primers referring to Miya et al. 20
+In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were conducted. Total eDNA was extracted from the frozen filters using a DNeasy Blood and Tissue Kit (Qiagen, Hilden, Germany) following Yamamoto et al. 2019. Mitochondorial 12S rRNA gene was amplified using MiFish universal primers referring to Miya et al. 2015 with slight modification. The details was shown in Hongo et al. (受理されてないようだったら書くしかない).  eDNA sequence were ....
 
 
 \flushleft{\textbf{2.2.2 Catch statistics}}\\
 To estimate the chub-- and the chub+ indices of egg density by considering sampling effects (i.e., spatio--temporal changes in survey design) as well as the effect of the egg density of chub mackerel on the catchability of egg density of spotted mackerel, we used the multivariate vector autoregressive spatio-temporal (VAST) model (Thorson and Barnett, 2017), which accounts for spatio-temporal changes in survey design, survey effort, and observation rates and can accurately estimate relative local densities at high resolution by standardizing sampling designs (Thorson and Barnett, 2017; Thorson, 2019). The model includes two potential components because it is designed to support delta-models: (i) the encounter probability $p_{i}$ for each sample $i$ and (ii) the expected egg density $d_{i}$ for each sample $i$ when spawning occurs (i.e., egg density is not zero). The encounter probability $p_{i}$ and the expected egg density $d_{i}$ are, respectively, approximated using a logit-linked linear predictor and a log-linked linear predictor as follows (Thorson and Barnett, 2017):
+
+
+
+
+\flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
+
+
+
+\flushleft{\textbf{equation examples}}\\
 %\[
 \begin{equation}
 \begin{array}{ll}
@@ -121,10 +130,6 @@ $\lambda$ is the effect of the chatchability covariate $Q(i)$:
 Q(i) = \mathrm{log} (d_{chub}(s_{i})+0.1). 
 \]
 That is, this term considers the effect of species misidentification between chub mackerel and spotted mackerel; as mentioned earlier, we suspected overestimation of egg density of spotted mackerel because the difference in egg diameter has become ambiguous according to increase in egg density of chub mackerel and the distributions of egg diameters between species have overlapped (Yukami et al., 2019). The constant 0.1 was added because $\mathrm{log} 0$ (i.e., no chub mackerel eggs) is undefined, and the same result was obtained when using $1$ in place of $0.1$.
-
-\flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
-
-
 
 
 
