@@ -85,7 +85,16 @@ The predicted spatial distribution of four fish form our model reduced
 
 
 \subsection{A general model to estimate species distribution from eDNA}
-To estimate the spatial distribution from eDNA considering with spatial biases due to degradation from environmental factors (e.g., temperature and advection), 
+Integrated spatial distribution model that account for explicitly spatial autocorrelation in occurrence were built by Pacifici et al. (2017), which shows three approaches to predict the spatial distribution of species: the joint likelihood (shared), correlation, and covariate methods. The joint likelihood method uses multiple data types to simultaneously estimate a shared set of parameters with constraining that the likelihoods of shared set of parameters to be equal across. The correlation method connects multiple data types indirectly through a shared covariance matrix that captures similar patterns present in each data sources. The covariate method incorporates information from a added dataset via a fixed effect. 
+
+\ \ \ \ \ \ \ \ \ \ 
+Although each methods estimate the spatial distribution of species using multiple data sets, we need to select method depending on the data features for analysis because there are strengths and weaknesses (Pacifici et al. 2017; Miller et al. 2018). The joint likelihood method may be problematic when the added data (second data?) is of poorly quality compared to correlation and covariate methods because each data can directly inform the latent occurrence state and the weight given to estimate the parameters is naturally determined by their relative size and quality. Thus, it is not the best method when our second data is low quality while it is the best method when all data are deemed reliable.
+%The joint likelihood method simultaneously fits a likelihood to both data sources
+%The joint likelihood approach uses multiple data types to simultaneously estimate a shared set of parameters.
+%the shared set of parameters within each of the individual likelihoods is constrained to be equal across likelihoods.
+
+\ \ \ \ \ \ \ \ \ \ 
+In this study, to estimate the spatial distribution of species from eDNA considering with spatial uncertainties, we make a integrated species distribution model using correlation method.
 
 \[
 \mathrm{logit}(p_{1}(s_{i})) = \alpha_{1} + \beta(s_{i}) + \theta(s_{i}) + u_{1}(s_{i})
@@ -103,13 +112,13 @@ To estimate the spatial distribution from eDNA considering with spatial biases d
 
 \subsection{An application to a eDNA and catch data in Tokyo Bay}
 \flushleft{\textbf{2.2.1 eDNA data}}\\
-\flushleft{\textbf{2.2.1.1 Field survey}}\\
+\flushleft{\textbf{Field surveys}}\\
 Field surveys were conducted by prefectural experimental station in Chiba, following the consistent sampling design at 14 sites in Tokyo Bay from April to December in 2018 (Fig. 1). 
 %Field surveys were conducted at 14 sites in Tokyo Bay from April to December in 2018 using R/V Fusanami or R/V Fusami-maru of Chiba Prefecture and R/V Enoshima-maru of Kanagawa Prefecture (Fig. 1). 
 In each sites, seawater and environmental data were simultaneously collected. For eDNA analysis, two litter of bottom seawater was collected using a Niskin water sampler, and then it was separated for two 1L samples for replicate. Each samples filtered glass fiber membrane GF/F (0.7 $\mu m$ pore size; Cytiva, Sheffield, UK) onboard and then the filters were frozen on a block of dry ice. These frozen filters were stored at $-30^\circ$ in the laboratory until eDNA extraction. To lower the levels of cross-contamination, equipments for eDNA sampling were changed new one or washed in each sites. During sampling the bottom seawater, seawater temperature, salinity, pH, and dissolved oxygen (DO) at the same depth of seawater sampling for eDNA were measured by CTD (メーカー).
 %The egg surveys were conducted by 18 prefectural experimental stations or fisheries research institutes and two national research institutes of the Japan Fisheries Research and Education Agency, following the consistent sampling designs, as a part of the stock assessment project.
 
-\flushleft{\textbf{2.2.1.1 Laboratory experiments}}\\
+\flushleft{\textbf{Laboratory experiments}}\\
 In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were conducted. Total eDNA was extracted from the frozen filters using a DNeasy Blood and Tissue Kit (Qiagen, Hilden, Germany) following Yamamoto et al. 2019. Mitochondorial 12S rRNA gene was amplified using MiFish universal primers referring to Miya et al. 2015 with slight modification. The details was shown in Hongo et al. (受理されてないようだったら書くしかない).  eDNA sequence were ....
 
 

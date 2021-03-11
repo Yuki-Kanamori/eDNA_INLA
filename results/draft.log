@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  11 MAR 2021 09:18
+This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  11 MAR 2021 11:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -307,28 +307,28 @@ LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 87.
 
-[5]
+[5] [6]
 
 LaTeX Font Warning: Font shape `JT2/mc/m/it' undefined
-(Font)              using `JT2/mc/m/n' instead on input line 117.
+(Font)              using `JT2/mc/m/n' instead on input line 126.
 
 
 LaTeX Font Warning: Font shape `JY2/mc/m/it' undefined
-(Font)              using `JY2/mc/m/n' instead on input line 117.
+(Font)              using `JY2/mc/m/n' instead on input line 126.
 
 LaTeX Font Info:    Font shape `JT2/mc/m/it' will be
-(Font)              scaled to size 11.54663pt on input line 117.
+(Font)              scaled to size 11.54663pt on input line 126.
 LaTeX Font Info:    Font shape `JY2/mc/m/it' will be
-(Font)              scaled to size 11.54663pt on input line 117.
-[6] [7] [8]
+(Font)              scaled to size 11.54663pt on input line 126.
+[7] [8] [9]
 File: idea.png Graphic file (type bmp)
 <idea.png>
 
-Overfull \hbox (68.57112pt too wide) in paragraph at lines 159--160
+Overfull \hbox (68.57112pt too wide) in paragraph at lines 168--169
  [][] 
  []
 
-[9] (./draft.aux)
+[10] (./draft.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -342,4 +342,4 @@ Here is how much of TeX's memory you used:
  929 hyphenation exceptions out of 8191
  25i,6n,21p,2061b,398s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on draft.dvi (9 pages, 20108 bytes).
+Output written on draft.dvi (10 pages, 22768 bytes).
