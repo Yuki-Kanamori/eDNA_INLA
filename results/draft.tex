@@ -133,12 +133,6 @@ where $\alpha$ and $x_{k}(s_{i})$ are the intercept and the covariates at sites 
 %\mathrm{logit}(p_{2}(s_{i})) = \alpha_{2} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{2}(s_{i})
 %\]
 
-%\flushleft{\textbf{2.1.1 Survey and data}}\\
-%The egg density data with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution in the areas from $\textrm{122}^\circ$E to $\textrm{150}^\circ$E and $\textrm{24}^\circ$N to $\textrm{43}^\circ$N was used. The egg density data set was derived from monthly egg surveys off the Pacific coast of Japan from January to June, 2005--2019 (Takasuka et al., 2008a, 2019). The aim of the surveys was to monitor the egg abundance of major small pelagic fish species, including chub mackerel and spotted mackerel, so that the spatial area and survey month of the data largely covered the major spawning grounds and spawning season. While some sampling locations were fixed, others varied for various reasons (e.g., environmental conditions). Accordingly, the survey design changed slightly each year (Kanamori et al., 2019). Although the sampling efforts were approximately consistent year-round, the efforts tended to be more intensive during early spring; effort was highest in February and decreased gradually thereafter (Takasuka et al., 2008b). 
-
-%\ \ \ \ \ \ \ \ \ \ 
-%The egg surveys were conducted by 18 prefectural experimental stations or fisheries research institutes and two national research institutes of the Japan Fisheries Research and Education Agency, following the consistent sampling designs, as a part of the stock assessment project. In the surveys, plankton nets were towed vertically from a depth of ~150 m to the surface (if the depth was <150 m, nets were lowered to just above the bottom). This range of depths covers the vertical distributions of eggs of small pelagic fish. During the period from 2005 to 2019, the surveys used a plankton net with a mouth ring diameter of 0.45 m and a mesh size of 0.335 (partially 0.330 mm in 2015) (Takasuka et al., 2017). The samples were fixed with 5\% formalin immediately after collection. In the laboratory, the samples were identified and sorted into eggs and larvae of different small pelagic species, based on the morphological characteristics (e.g., egg shape and size, number of oil globules, segmented yolk, perivitelline space ranging, yolk diameter, oil globule diameter). For the mackerel eggs, the egg diameters were measured to the nearest 0.025 mm by a micrometer for a maximum number of 100 individuals per sample (station or tow). Eggs with diameters $>$1.1 mm were identified as spotted mackerel, whereas those with diameters $leq$1.0 mm were identified as chub mackerel, according to Nishida et al. (2001). For any sample of $>$100 individuals, the proportion of the two species among 100 randomly selected individuals was assumed to be the same for the whole sample. Additionally, the number of eggs per unit area in the water column (number $\mathrm{m^{-2}}$) for each sampling tow was calculated by flow-meter revolutions, flow-meter revolutions per meter tow in the calibration, wire length (m), opening mouth area of the net  ($\mathrm{m^{-2}}$), and wire angle. Then, the arithmetic average of the number of eggs was obtained with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution. 
-%\textcolor{red}{The mean proportion of the total number of eggs of spotted mackerel against the total number of eggs of \textit{Scomber} was less than 20 \% from 2005 to 2019. Therefore, the effect of the misidentification error that we considered was from chub mackerel on spotted mackerel (i.e., we assumed that the effect of the misidentification error from spotted  mackerel on chub mackerel was small.)} More detailed descriptions of the surveys and data set are provided in previous studies of the reproductive biology of small pelagic fish species (e.g., Takasuka et al. 2008a,b, 2017, 2019).
 
 
 \subsection{An application to a eDNA and catch data in Tokyo Bay}
@@ -157,28 +151,17 @@ In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were condu
 A part of catch statistics of small-scale bottom trawl fisheries recorded by several representative boats of Chiba Prefecture were provided by Chiba Prefecture. This data included date, geographic location, efforts (number of tows), gear, and catch weight (kg) in each fish. Almost of all gear was beam trawl although dredge net also used. The species which also detected by eDNA was \textit{Conger myriaster} (マアナゴ), \textit{Kareius bicoloratus} (イシガレイ), \textit{Lateolabrax japonicus} (スズキ), and \textit{Konosirus punctatus} (コノシロ). Thus, we estimated the spatial distribution of these four species using the eDNA-IDM. \textcolor{red}{マコガレイ，カマス類，クロダイ，イシモチ類も解析できる？？}
 
 \flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
-To estimate the spatial distribution of four focal species from eDNA and catch data by considering uncertainties caused by environmental factors, we fitted the model (equation 1) to the presence/absence data of eDNA and of catch data collected in Tokyo Bay as follows:
+To estimate the spatial distribution of four focal species using eDNA and catch data by considering with spatial  uncertainties of eDNA, we fitted the model (equation 1) to the presence/absence of eDNA and of catch collected in Tokyo Bay as follows:
 %In this study, to estimate the spatial distribution of species from eDNA considering with spatial uncertainties, we make a integrated species distribution model using correlation method.
-
-
-\flushleft{\textbf{equation examples}}\\
-%\[
-\begin{equation}
-\begin{array}{ll}
-\mathrm{logit}\ p_{i} = \beta_{p}(t_{i}) + \omega_{p}(s_{i}) + \varepsilon_{p}(s_{i}, t_{i}) + \eta_{p}(v_{i}) + \lambda_{p}Q(i)\\
-%\]
-%\[
-\log d_{i} = \beta_{d}(t_{i}) + \omega_{d}(s_{i}) + \varepsilon_{d}(s_{i}, t_{i}) + \eta_{d}(v_{i}) + \lambda_{d}Q(i)
-%\]
-\end{array}
-\end{equation}
-where $\beta(t_{i})$ is the intercept for year $t$, and $\omega(s_{i})$ and $\varepsilon(s_{i}, t_{i})$ are the spatial and spatio--temporal random effects for year $t$ and location $s$, respectively. $\eta(v_{i})$ is the overdispersion random effect of factor $v_{i}$, which is the interaction of year and month. 
-$\lambda$ is the effect of the chatchability covariate $Q(i)$: 
 \[
-%Q(i) = \mathrm{log} (\mathrm{chub\,mackerel\,egg\,density}(s_{i})+0.1). 
-Q(i) = \mathrm{log} (d_{chub}(s_{i})+0.1). 
+\mathrm{logit} \ \ p_{e}(s_{i}) = \alpha_{e} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{e}(s_{i})
 \]
-That is, this term considers the effect of species misidentification between chub mackerel and spotted mackerel; as mentioned earlier, we suspected overestimation of egg density of spotted mackerel because the difference in egg diameter has become ambiguous according to increase in egg density of chub mackerel and the distributions of egg diameters between species have overlapped (Yukami et al., 2019). The constant 0.1 was added because $\mathrm{log} 0$ (i.e., no chub mackerel eggs) is undefined, and the same result was obtained when using $1$ in place of $0.1$.
+\[
+\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \beta_{i} + \theta(s_{i}) + u_{c}(s_{i})
+\]
+where $\alpha$ is the intercept, and $x_{k}(s_{i})$ is the covariates at sites $i$ for occurrence probabilities of eDNA at sites $i$. In the study, seawater temperature, salinity, pH, and DO were used as covariates which effect on the occurrence of eDNA (i.e., $k = 4$). $u(s_{i})$ is spatial error that is specific for each data following multivariate normal distributions $\mathrm{MVN}(0, \mathbf{R})$, where the variance--covariance matrix $\mathbf{R}$ is a Mat\'{e}rn correlation function. $\theta$ which is shared between eDNA and catch is the common spatial pattern between the two data, which cannot explain by each terms of the equations. That is, $\theta$ can be interpreted as the spatial distribution of species we want to know.
+
+
 
 
 
