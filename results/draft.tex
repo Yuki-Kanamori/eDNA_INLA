@@ -98,16 +98,41 @@ The correlation method is added robustness to the joint likelihood because the s
 The covariate method does not make full use of the information in the second data because the second data as a constructed covariate in the mean occurrence state. In addition, this method can reduce the computational cost because there are fewer parameters to estimate and the number of data locations can be reduced. Thus, it is the best method when the second data is low quality and/or there is computational limitation while it may not the best method when the information of the second data is needed.
 
 
+%\ \ \ \ \ \ \ \ \ \ 
+%As described above, 
+%When predicting the spatial distribution of species from eDNA, eDNA data is often collected systematic method (e.g., collected at the same sites and efforts)
 
+%When predicting the spatial distribution of species from eDNA using integrated species distribution model, the information that a species exists as second data is needed because of spatial uncertainties of eDNA due to complex factors. 
 \ \ \ \ \ \ \ \ \ \ 
-In this study, to estimate the spatial distribution of species from eDNA considering with spatial uncertainties, we make a integrated species distribution model using correlation method.
+When predicting the spatial distribution of species from eDNA using integrated species distribution model, the information that a species exists is needed as second data to consider spatial uncertainties of eDNA due to complex factors (Fig. 1). Hence, the second data is preferred to high quality as possible. 
+%However, spatially widely collected data and/or 
+%しかし，空間的に広く，また調査データのように系統的に取得されているデータを2番目のデータとして使用できるケースは限られているかもしれない．なぜなら，eDNAは直接的なモニタリングに比べて簡易的であるためより広い範囲で取得されており，またコンタミを防ぐためにも厳密な調査手法によって取得されている可能性が高いからである．
+%したがって，2番目のデータがhigh qualityであることは期待できないかもしれない．
 
-\[
-\mathrm{logit}(p_{1}(s_{i})) = \alpha_{1} + \beta(s_{i}) + \theta(s_{i}) + u_{1}(s_{i})
-\]
-\[
-\mathrm{logit}(p_{2}(s_{i})) = \alpha_{2} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{2}(s_{i})
-\]
+しかし，eDNAは直接的なモニタリングに比べて簡易的であるためより広い範囲で取得されている可能性が高く，eDNAのデータと同様の空間範囲で調査データのように質の高いデータを取得することは難しいかもしれない．その一方で，eDNAの空間的な不確実性を考慮するためには，種がいた証拠である2番目のデータの情報をeDNAのデータにしっかりと伝える必要がある．これらを考えると，integrated spetial distribution modelを用いたeDNAからの空間分布の推定には，以下のようなcorrelation methodが適切である: 
+
+\begin{equation}
+\begin{array}{ll}
+p_{e}(s_{i}) = \alpha_{e} + \sum_{k}f_{e, k}(x_{e, k}(s_{i})) + w \theta(s_{i}) + u_{e}(s_{i})\\
+p_{a}(s_{i}) = \alpha_{a} + \sum_{k}f_{a, k}(x_{a, k}(s_{i})) + \theta(s_{i}) + u_{a}(s_{i})\\
+%\]
+%\[
+%\]
+\end{array}
+\end{equation}
+where $\alpha$ and $x_{k}(s_{i})$ are the intercept and the covariates at sites $i$ for occurrence probabilities at sites $i$ of the added data ($p_{a}$) and eDNA data ($p_{e}$), respectively. $u(s_{i})$ is spatial error that is specific for each data following multivariate normal distributions $\mathrm{MVN}(0, \mathbf{R})$, where the variance--covariance matrix $\mathbf{R}$ is a Mat\'{e}rn correlation function. $\theta$ which is shared between two equations is the common spatial pattern between the two data, which cannot explain by each terms of the equations. That is, $\theta$ can be interpreted as "true" spatial distribution of species.
+
+
+
+
+
+%\[
+%\mathrm{logit}(p_{1}(s_{i})) = \alpha_{1} + \beta(s_{i}) + \theta(s_{i}) + u_{1}(s_{i})
+%\]
+%\[
+%\mathrm{logit}(p_{2}(s_{i})) = \alpha_{2} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{2}(s_{i})
+%\]
+
 %\flushleft{\textbf{2.1.1 Survey and data}}\\
 %The egg density data with $\textrm{30}^\prime$ latitude $\times$ $\textrm{30}^\prime$ longitude horizontal square resolution in the areas from $\textrm{122}^\circ$E to $\textrm{150}^\circ$E and $\textrm{24}^\circ$N to $\textrm{43}^\circ$N was used. The egg density data set was derived from monthly egg surveys off the Pacific coast of Japan from January to June, 2005--2019 (Takasuka et al., 2008a, 2019). The aim of the surveys was to monitor the egg abundance of major small pelagic fish species, including chub mackerel and spotted mackerel, so that the spatial area and survey month of the data largely covered the major spawning grounds and spawning season. While some sampling locations were fixed, others varied for various reasons (e.g., environmental conditions). Accordingly, the survey design changed slightly each year (Kanamori et al., 2019). Although the sampling efforts were approximately consistent year-round, the efforts tended to be more intensive during early spring; effort was highest in February and decreased gradually thereafter (Takasuka et al., 2008b). 
 
@@ -133,7 +158,7 @@ A part of catch statistics of small-scale bottom trawl fisheries recorded by sev
 
 \flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
 To estimate the spatial distribution of four focal species from eDNA and catch data by considering uncertainties caused by environmental factors, we fitted the model (equation 1) to the presence/absence data of eDNA and of catch data collected in Tokyo Bay as follows:
-
+%In this study, to estimate the spatial distribution of species from eDNA considering with spatial uncertainties, we make a integrated species distribution model using correlation method.
 
 
 \flushleft{\textbf{equation examples}}\\

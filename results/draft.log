@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  11 MAR 2021 13:41
+This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  11 MAR 2021 15:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -307,39 +307,39 @@ LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 87.
 
-[5] [6]
+[5] [6] [7]
 
 LaTeX Font Warning: Font shape `JT2/mc/m/it' undefined
-(Font)              using `JT2/mc/m/n' instead on input line 132.
+(Font)              using `JT2/mc/m/n' instead on input line 157.
 
 
 LaTeX Font Warning: Font shape `JY2/mc/m/it' undefined
-(Font)              using `JY2/mc/m/n' instead on input line 132.
+(Font)              using `JY2/mc/m/n' instead on input line 157.
 
 LaTeX Font Info:    Font shape `JT2/mc/m/it' will be
-(Font)              scaled to size 11.54663pt on input line 132.
+(Font)              scaled to size 11.54663pt on input line 157.
 LaTeX Font Info:    Font shape `JY2/mc/m/it' will be
-(Font)              scaled to size 11.54663pt on input line 132.
-[7] [8] [9]
+(Font)              scaled to size 11.54663pt on input line 157.
+[8] [9] [10]
 File: idea.png Graphic file (type bmp)
 <idea.png>
 
-Overfull \hbox (68.57112pt too wide) in paragraph at lines 174--175
+Overfull \hbox (68.57112pt too wide) in paragraph at lines 199--200
  [][] 
  []
 
-[10] (./draft.aux)
+[11] (./draft.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 2082 strings out of 493270
- 28523 string characters out of 6145018
+ 2089 strings out of 493270
+ 28590 string characters out of 6145018
  104520 words of memory out of 5000000
- 5987 multiletter control sequences out of 15000+600000
- 15297 words of font info for 61 fonts, out of 8000000 for 9000
+ 5991 multiletter control sequences out of 15000+600000
+ 16225 words of font info for 64 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 25i,6n,21p,2061b,398s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 25i,6n,21p,2061b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on draft.dvi (10 pages, 24128 bytes).
+Output written on draft.dvi (11 pages, 26852 bytes).
