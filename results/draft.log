@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  11 MAR 2021 16:19
+This is e-upTeX, Version 3.14159265-p3.8.0-u1.23-180226-2.6 (utf8.uptex) (TeX Live 2018) (preloaded format=uplatex 2018.5.16)  12 MAR 2021 07:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -321,8 +321,8 @@ LaTeX Font Info:    Font shape `JT2/mc/m/it' will be
 LaTeX Font Info:    Font shape `JY2/mc/m/it' will be
 (Font)              scaled to size 11.54663pt on input line 151.
 [8] [9] [10]
-File: idea.png Graphic file (type bmp)
-<idea.png>
+File: fig1.png Graphic file (type bmp)
+<fig1.png>
 
 Overfull \hbox (68.57112pt too wide) in paragraph at lines 182--183
  [][] 
