@@ -95,6 +95,8 @@ Although each methods estimate the spatial distribution of species using multipl
 The correlation method is added robustness to the joint likelihood because the second data indirectly inform the occurrence state. Thus, it is the best method when our second data is low quality while it is inferior to the joint likelihood method when both data are deemed reliable.
 %The correlation method is added robustness to the joint likelihood for the influence of unreliable data because the second data indirectly inform the occurrence state.
 % while this method is inferior to the joint likelihood when both data are deemed reliable.  
+The covariate method does not make full use of the information in the second data because the second data as a constructed covariate in the mean occurrence state. In addition, this method can reduce the computational cost because there are fewer parameters to estimate and the number of data locations can be reduced. Thus, it is the best method when the second data is low quality and/or there is computational limitation while it may not the best method when the information of the second data is needed.
+
 
 
 \ \ \ \ \ \ \ \ \ \ 
