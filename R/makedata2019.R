@@ -260,7 +260,39 @@ e_chi = merge(e_chi, ph, by = "tag", all = T)
 
 
 
+# ---------------------------------------------------------------
+# kanagawa ---------------------------------------------------------
+# ---------------------------------------------------------------
+#st27
+st27 = mifish %>% filter(site == "27") %>% select(-tag) %>% mutate(tag = paste(year, month, SorB, sep = "_"))
+env27 = env_kana %>% filter(site == "27") %>% mutate(tag = paste(year, month, SorB, sep = "_")) %>% select(-year, -month, -day, -site, -SorB)
+st27 = merge(st27, env27, by = "tag")
 
+#st134
+st134 = mifish %>% filter(site == "134") %>% select(-tag) %>% mutate(tag = paste(year, month, SorB, sep = "_"))
+env134 = env_kana %>% filter(site == "134") %>% mutate(tag = paste(year, month, SorB, sep = "_")) %>% select(-year, -month, -day, -site, -SorB)
+st134 = merge(st134, env134, by = "tag")
+
+#st136
+st136 = mifish %>% filter(site == "136") %>% select(-tag) %>% mutate(tag = paste(year, month, SorB, sep = "_"))
+env136 = env_kana %>% filter(site == "136") %>% mutate(tag = paste(year, month, SorB, sep = "_")) %>% select(-year, -month, -day, -site, -SorB)
+st136 = merge(st136, env136, by = "tag")
+
+#st129
+st129 = mifish %>% filter(site == "129") %>% select(-tag) %>% mutate(tag = paste(year, month, SorB, sep = "_"))
+env129 = env_kana %>% filter(site == "129") %>% mutate(tag = paste(year, month, SorB, sep = "_")) %>% select(-year, -month, -day, -site, -SorB)
+st129 = merge(st129, env129, by = "tag")
+
+e_kana = rbind(st27, st134)
+e_kana = rbind(e_kana, st136)
+e_kana = rbind(e_kana, st129)
+unique(e_kana$site)
+
+
+# combine -------------------------------------------------------
+colnames(e_chi)
+colnames(e_kana)
+mifish = rbind(e_chi %>% dplyr::rename(temp = 水温, salinity = 塩分, DO_mg = DO.mg., pH = ｐＨ), e_kana)
 
 setwd(dir = dir_output)
-write.csv(df, "joint_edna2019.csv")
+write.csv(mifish, "joint_edna2019.csv", fileEncoding = "CP932")
