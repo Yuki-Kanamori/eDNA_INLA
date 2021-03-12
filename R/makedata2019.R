@@ -38,10 +38,11 @@ mifish = mifish %>% select(-tag) %>% mutate(tag = paste(year, month, day, site, 
 
 
 
+
+# ---------------------------------------------------------------
 # env. data ------------------------------------------------------
+# ---------------------------------------------------------------
 setwd(dir = dir_input)
-# env = read_csv("Data/Env_data_merged_unique.csv")
-# summary(env)
 
 #========== chiba ==========#
 #========== env1 ==========#
@@ -130,6 +131,9 @@ for(i in 1:length(files)){
 # env_136_1 = env_136_1 %>% mutate(year = 2019, month = 1, day = NA, site = 136)
 
 
+
+
+#========== kanagawa ==========#
 # st27, 134, 136 ------------------------------------------------
 dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/"
 st = c("env_27", "env_134", "env_136")
@@ -232,7 +236,7 @@ env_kana = rbind(envk1, envk2)
 # chiba ---------------------------------------------------------
 # ---------------------------------------------------------------
 #eDNA
-e_chi = mifish %>% filter(site != "27") %>% filter(site != "134") %>% filter(site != "136") %>% filter(site != "129")
+e_chi = mifish %>% filter(site != "27") %>% filter(site != "134") %>% filter(site != "136") %>% filter(site != "129") #4772
 unique(e_chi$site)
 
 unique(env1$pop)
@@ -242,7 +246,7 @@ env1 = env1 %>% mutate(site = if_else(site %in% c("ANESAKI", "ANE"), "AZ", site)
   mutate(site = if_else(site == "FUTTU", "FT", site)) %>%
   mutate(site = if_else(site %in% c("URA", "URAYASU"), "UY", site)) %>%
   mutate(SorB = rep(c("S", "B"), nrow(env1)/2)) %>% 
-  mutate(tag = paste(year, month, day, site, SorB, sep = "_"))
+  mutate(tag = paste(year, month, day, site, SorB, sep = "_")) #398
 
 unique(env1$site)
 
