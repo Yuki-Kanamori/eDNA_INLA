@@ -156,10 +156,51 @@ envk1 = data.frame(t2) %>% mutate(year = 2019, month = as.numeric(str_sub(file, 
 (colnames(envk1))
 envk1 = envk1 %>% select("T090C", "Ph", "Sal00", "Sbeox0Mg.L","SorB", "year", "month", "day", "site")
 colnames(envk1) = c("temp", "pH", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
+summary(envk1) #pHの値が変（負の値）
+
+### Jan.
+env_27_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-27.csv", skip = 43, fileEncoding = "CP932")
+env_27_1 = env_27_1 %>% mutate(year = 2019, month = 1, day = NA, site = 27)
+t = env_27_1
+min = min(t$深度..m.)
+max = max(t$深度..m.)
+s = t %>% filter(深度..m. == min) %>% mutate(SorB = "S")
+b = t %>% filter(深度..m. == max) %>% mutate(SorB = "B")
+env_27_1 = rbind(s, b)
+
+env_134_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-134.csv", skip = 43, fileEncoding = "CP932")
+env_134_1 = env_134_1 %>% mutate(year = 2019, month = 1, day = NA, site = 134)
+t = env_134_1
+min = min(t$深度..m.)
+max = max(t$深度..m.)
+s = t %>% filter(深度..m. == min) %>% mutate(SorB = "S")
+b = t %>% filter(深度..m. == max) %>% mutate(SorB = "B")
+env_134_1 = rbind(s, b)
+
+env_136_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-136.csv", skip = 43, fileEncoding = "CP932")
+env_136_1 = env_136_1 %>% mutate(year = 2019, month = 1, day = NA, site = 136)
+t = env_136_1
+min = min(t$深度..m.)
+max = max(t$深度..m.)
+s = t %>% filter(深度..m. == min) %>% mutate(SorB = "S")
+b = t %>% filter(深度..m. == max) %>% mutate(SorB = "B")
+env_136_1 = rbind(s, b)
+
+jan = rbind(env_27_1, env_134_1, env_136_1)
+
+(colnames(jan))
+jan = jan %>% select("水温....", "塩分....", "DO..mg.l.","SorB", "year", "month", "day", "site")
+colnames(jan) = c("temp", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
+jan$pH = NA
+
+envk1 = rbind(jan, envk1)
 
 
 
+
+# ---------------------------------------------------------------
 # chiba ---------------------------------------------------------
+# ---------------------------------------------------------------
 #eDNA
 e_chi = mifish %>% filter(site != "27") %>% filter(site != "134") %>% filter(site != "136") %>% filter(site != "129")
 unique(e_chi$site)
