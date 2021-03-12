@@ -4,6 +4,7 @@ dir_output = "/Users/Yuki/Dropbox/eDNA_INLA/"
 require(tidyverse)
 require(openxlsx)
 require(gdata)
+require(abind)
 
 # 2019 ----------------------------------------------------------
 # eDNA ----------------------------------------------------------
@@ -42,6 +43,7 @@ setwd(dir = dir_input)
 # env = read_csv("Data/Env_data_merged_unique.csv")
 # summary(env)
 
+#========== chiba ==========#
 #========== env1 ==========#
 dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env1"
 setwd(dir = dir)
@@ -58,6 +60,9 @@ for(i in 1:length(files)){
 }
 
 
+
+
+#========== kanagawa ==========#
 #========== env_129 ==========#
 dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_129"
 setwd(dir = dir)
@@ -72,64 +77,85 @@ for(i in 1:length(files)){
 }
 
 
-#========== env2 ==========#
-# dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env2"
+
+
+# #========== env_27 ==========#
+# dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_27"
 # setwd(dir = dir)
 # path = dir
 # files = list.files(path)
 # 
-# ###あとで
+# env_27 = NULL
+# for(i in 1:length(files)){
+#   temp = read.table(paste0(files[i]), header = T)
+#   temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 27)
+#   env_27 = rbind(env_27, temp)
+# }
+# 
+# env_27_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-27.csv", skip = 43, fileEncoding = "CP932")
+# env_27_1 = env_27_1 %>% mutate(year = 2019, month = 1, day = NA, site = 27)
+# 
+# 
+# #========== env_134 ==========#
+# dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_134"
+# setwd(dir = dir)
+# path = dir
+# files = list.files(path)
+# 
+# env_134 = NULL
+# for(i in 1:length(files)){
+#   temp = read.table(paste0(files[i]), header = T)
+#   temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 134)
+#   env_134 = rbind(env_134, temp)
+# }
+# 
+# env_134_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-134.csv", skip = 43, fileEncoding = "CP932")
+# env_134_1 = env_134_1 %>% mutate(year = 2019, month = 1, day = NA, site = 134)
+# 
+# 
+# #========== env_136 ==========#
+# dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_136"
+# setwd(dir = dir)
+# path = dir
+# files = list.files(path)
+# 
+# env_136 = NULL
+# for(i in 1:length(files)){
+#   temp = read.table(paste0(files[i]), header = T)
+#   temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 136)
+#   env_136 = rbind(env_136, temp)
+# }
+# 
+# env_136_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-136.csv", skip = 43, fileEncoding = "CP932")
+# env_136_1 = env_136_1 %>% mutate(year = 2019, month = 1, day = NA, site = 136)
 
 
-#========== env_27 ==========#
-dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_27"
-setwd(dir = dir)
-path = dir
-files = list.files(path)
+# st27, 134, 136 ------------------------------------------------
+dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/"
+st = c("env_27", "env_134", "env_136")
+t2 = NULL
+t3 = NULL
 
-env_27 = NULL
-for(i in 1:length(files)){
-  temp = read.table(paste0(files[i]), header = T)
-  temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 27)
-  env_27 = rbind(env_27, temp)
+for(i in 1:length(st)){
+  path = paste0(dir, st[i])
+  setwd(path)
+  files = list.files()
+  
+  for(j in 1:length(files)){
+    t = read.table(files[j], header = T) %>% mutate(file = paste0(files[j]))
+    min = min(t$DepSM)
+    max = max(t$DepSM)
+    s = t %>% filter(DepSM == min) %>% mutate(SorB = "S")
+    b = t %>% filter(DepSM == max) %>% mutate(SorB = "B")
+    sb = rbind(s, b)
+    t2 = abind(t2, sb, along = 1)
+  }
+  #t3 = abind(t3, t2, along = 1)
 }
-
-env_27_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-27.csv", skip = 43, fileEncoding = "CP932")
-env_27_1 = env_27_1 %>% mutate(year = 2019, month = 1, day = NA, site = 27)
-
-
-#========== env_134 ==========#
-dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_134"
-setwd(dir = dir)
-path = dir
-files = list.files(path)
-
-env_134 = NULL
-for(i in 1:length(files)){
-  temp = read.table(paste0(files[i]), header = T)
-  temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 134)
-  env_134 = rbind(env_134, temp)
-}
-
-env_134_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-134.csv", skip = 43, fileEncoding = "CP932")
-env_134_1 = env_134_1 %>% mutate(year = 2019, month = 1, day = NA, site = 134)
-
-
-#========== env_136 ==========#
-dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_136"
-setwd(dir = dir)
-path = dir
-files = list.files(path)
-
-env_136 = NULL
-for(i in 1:length(files)){
-  temp = read.table(paste0(files[i]), header = T)
-  temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(files[i], 5, 6)), day = NA, site = 136)
-  env_136 = rbind(env_136, temp)
-}
-
-env_136_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-136.csv", skip = 43, fileEncoding = "CP932")
-env_136_1 = env_136_1 %>% mutate(year = 2019, month = 1, day = NA, site = 136)
+envk1 = data.frame(t2) %>% mutate(year = 2019, month = as.numeric(str_sub(file, 5, 6)), day = NA, site = as.numeric(str_sub(file, 8, 10)))
+(colnames(envk1))
+envk1 = envk1 %>% select("T090C", "Ph", "Sal00", "Sbeox0Mg.L","SorB", "year", "month", "day", "site")
+colnames(envk1) = c("temp", "pH", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
 
 
 
