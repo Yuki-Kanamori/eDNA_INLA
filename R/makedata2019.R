@@ -63,18 +63,18 @@ for(i in 1:length(files)){
 
 
 #========== kanagawa ==========#
-#========== env_129 ==========#
-dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_129"
-setwd(dir = dir)
-path = dir
-files = list.files(path)
-
-env_129 = NULL
-for(i in 1:length(files)){
-  temp = read.xls(paste0(files[i]), sheet = 6, skip = 43)
-  temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(日付情報, 6, 7)), day = as.numeric(str_sub(日付情報, 9, 10)), site = 129)
-  env_129 = rbind(env_129, temp)
-}
+# #========== env_129 ==========#
+# dir = "/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/env_129"
+# setwd(dir = dir)
+# path = dir
+# files = list.files(path)
+# 
+# env_129 = NULL
+# for(i in 1:length(files)){
+#   temp = read.xls(paste0(files[i]), sheet = 6, skip = 43)
+#   temp = temp %>% mutate(year = 2019, month = as.numeric(str_sub(日付情報, 6, 7)), day = as.numeric(str_sub(日付情報, 9, 10)), site = 129)
+#   env_129 = rbind(env_129, temp)
+# }
 
 
 
@@ -194,6 +194,36 @@ colnames(jan) = c("temp", "salinity", "DO_mg","SorB", "year", "month", "day", "s
 jan$pH = NA
 
 envk1 = rbind(jan, envk1)
+
+
+
+# st129 ---------------------------------------------------------
+st2 = "env_129"
+path2 = paste0(dir, st2)
+setwd(path2)
+(files2 = list.files())
+t2 = NULL
+
+for(i in 1:length(files2)){
+  t = read.xls(paste0(files2[i]), sheet = 6, skip = 43) %>% dplyr::rename(dep = "深度..m.")
+  min = min(t[, 3])
+  max = max(t[, 3])
+  s = t %>% filter(dep == min) %>% mutate(SorB = "S")
+  b = t %>% filter(dep == max) %>% mutate(SorB = "B")
+  sb = rbind(s, b)
+  t2 = abind(t2, sb, along = 1)
+}
+envk2 = data.frame(t2) %>% mutate(date = as.Date(日付情報)) %>% mutate(year = 2019, month = as.numeric(str_sub(date, 6, 7)), day = as.numeric(str_sub(date, 9, 10)), site = "129")
+colnames(envk2) #pHがない！！
+
+envk2 = envk2 %>% select("水温....", "塩分....", "DO..mg.l.","SorB", "year", "month", "day", "site")
+colnames(envk2) = c("temp", "salinity", "DO_mg","SorB", "year", "month", "day", "site")
+envk2 = envk2 %>% mutate(pH = NA)
+
+env_kana = rbind(envk1, envk2)
+
+
+
 
 
 
