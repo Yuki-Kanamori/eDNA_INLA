@@ -103,6 +103,7 @@ In this paper, to infer spatial distribution of species from the occurrence data
 
 
 \subsection{A general model to estimate species distribution from eDNA}
+\flushleft{\textbf{Features of integrated spatial distribution model}}\\
 Integrated spatial distribution model that account for explicitly spatial autocorrelation in occurrence were built by Pacifici et al. (2017), which shows three approaches to predict the spatial distribution of species: the joint likelihood (shared), correlation, and covariate methods. The joint likelihood method uses multiple data types to simultaneously estimate a shared set of parameters with constraining that the likelihoods of shared set of parameters to be equal across. The correlation method connects multiple data types indirectly through a shared covariance matrix that captures similar patterns present in each data sources. The covariate method incorporates information from a added dataset via a fixed effect. 
 
 \ \ \ \ \ \ \ \ \ \ 
@@ -121,7 +122,7 @@ The covariate method does not make full use of the information in the second dat
 %When predicting the spatial distribution of species from eDNA, eDNA data is often collected systematic method (e.g., collected at the same sites and efforts)
 
 %When predicting the spatial distribution of species from eDNA using integrated species distribution model, the information that a species exists as second data is needed because of spatial uncertainties of eDNA due to complex factors. 
-\ \ \ \ \ \ \ \ \ \ 
+\flushleft{\textbf{The model for eDNA}}\\
 When predicting the spatial distribution of species from eDNA using integrated species distribution model, the information that a species exists is needed as second data to consider spatial uncertainties of eDNA due to complex factors (Fig. 1). Hence, the second data is preferred to high quality as possible. 
 %However, spatially widely collected data and/or 
 %しかし，空間的に広く，また調査データのように系統的に取得されているデータを2番目のデータとして使用できるケースは限られているかもしれない．なぜなら，eDNAは直接的なモニタリングに比べて簡易的であるためより広い範囲で取得されており，またコンタミを防ぐためにも厳密な調査手法によって取得されている可能性が高いからである．
