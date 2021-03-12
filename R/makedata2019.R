@@ -17,11 +17,11 @@ sp2 = read.xls("splist2019.xlsx", sheet = 2)
 
 d2019_1 = inner_join(sp1, d2019_1, by = "ID")
 d2019_1 = d2019_1 %>% gather(key = tag, value = copy, 5:ncol(d2019_1)) 
-d2019_1 = d2019_1 %>% mutate(year = 2019, month = as.numeric(str_sub(tag, 4, 5)), day = as.numeric(str_sub(tag, 6, 7)), site = str_sub(tag, 9, -5), depth = str_sub(tag, -3, -3), rep = str_sub(tag, -1, -1))
+d2019_1 = d2019_1 %>% mutate(year = 2019, month = as.numeric(str_sub(tag, 4, 5)), day = as.numeric(str_sub(tag, 6, 7)), site = str_sub(tag, 9, -5), SorB = str_sub(tag, -3, -3), rep = str_sub(tag, -1, -1))
 
 d2019_2 = inner_join(sp2, d2019_2, by = "ID")
 d2019_2 = d2019_2 %>% gather(key = tag, value = copy, 5:ncol(d2019_2)) 
-d2019_2 = d2019_2 %>% mutate(year = 2019, month = as.numeric(str_sub(tag, 4, 5)), day = as.numeric(str_sub(tag, 6, 7)), site = str_sub(tag, 9, -5), depth = str_sub(tag, -3, -3), rep = str_sub(tag, -1, -1))
+d2019_2 = d2019_2 %>% mutate(year = 2019, month = as.numeric(str_sub(tag, 4, 5)), day = as.numeric(str_sub(tag, 6, 7)), site = str_sub(tag, 9, -5), SorB = str_sub(tag, -3, -3), rep = str_sub(tag, -1, -1))
 
 summary(d2019_1)
 summary(d2019_2)
@@ -33,6 +33,7 @@ lonlat = lonlat %>% dplyr::rename(site = pop)
 mifish = left_join(edna, lonlat, by = "site")
 #%>% mutate(tag = paste(month, day, site, layer, sep = "_"))
 
+mifish = mifish %>% select(-tag) %>% mutate(tag = paste(year, month, day, site, SorB, sep = "_"))
 
 
 
@@ -130,6 +131,35 @@ for(i in 1:length(files)){
 env_136_1 = read.csv("/Users/Yuki/Dropbox/eDNA_INLA/篠原さん由来/Data/201901-136.csv", skip = 43, fileEncoding = "CP932")
 env_136_1 = env_136_1 %>% mutate(year = 2019, month = 1, day = NA, site = 136)
 
+
+
+# chiba ---------------------------------------------------------
+#eDNA
+e_chi = mifish %>% filter(site != "27") %>% filter(site != "134") %>% filter(site != "136") %>% filter(site != "129")
+unique(e_chi$site)
+
+unique(env1$pop)
+env1 = env1 %>% dplyr::rename(site = pop) 
+env1 = env1 %>% mutate(site = if_else(site %in% c("ANESAKI", "ANE"), "AZ", site)) %>%
+  mutate(site = if_else(site %in% c("FN", "FUNABASI"), "FB", site)) %>%
+  mutate(site = if_else(site == "FUTTU", "FT", site)) %>%
+  mutate(site = if_else(site %in% c("URA", "URAYASU"), "UY", site)) %>%
+  mutate(SorB = rep(c("S", "B"), nrow(env1)/2)) %>% 
+  mutate(tag = paste(year, month, day, site, SorB, sep = "_"))
+
+unique(env1$site)
+
+colnames(env1)
+
+temp = env1 %>% select(水温, tag)
+sal = env1 %>% select(塩分, tag)
+do = env1 %>% select(DO.mg., tag)
+ph = env1 %>% select(ｐＨ, tag)
+
+e_chi = merge(e_chi, temp, by = "tag", all = T)
+e_chi = merge(e_chi, sal, by = "tag", all = T)
+e_chi = merge(e_chi, do, by = "tag", all = T)
+e_chi = merge(e_chi, ph, by = "tag", all = T)
 
 
 
