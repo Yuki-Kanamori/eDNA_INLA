@@ -30,6 +30,7 @@ summary(d2019_2)
 edna = rbind(d2019_1, d2019_2)
 
 lonlat = read.table("2018/sampling_points.txt", header = T)
+lonlat[1, 4] = "FT"
 lonlat = lonlat %>% dplyr::rename(site = pop)
 mifish = left_join(edna, lonlat, by = "site")
 #%>% mutate(tag = paste(month, day, site, layer, sep = "_"))
