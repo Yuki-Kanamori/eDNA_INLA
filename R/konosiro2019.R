@@ -144,6 +144,7 @@ ep_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                     tag = "ep_dat")
 stk_edna = inla.stack(e_stk, ep_stk)
 
+
 #cpue
 c_stk = inla.stack(data = list(y = cbind(NA, catch)),
                    A = list(c_A, 1),
@@ -162,6 +163,7 @@ stk = inla.stack(stk_edna, stk_catch)
 # formula
 formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
 # + f(DO, model = "rw1") 
+
 
 # formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
 # formula = y ~ 0 + eb.0 + cb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.e, model = spde) + f(i.c, copy = "i.e", fixed = FALSE) + f(effort, model = "rw1")
@@ -183,7 +185,7 @@ res_kono = inla(formula,
 #                 control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
 #                 control.compute = list(waic = TRUE, dic = TRUE))
 
-res_kono$waic$waic; res_kono$dic$dic #640.3, 640.4
+res_kono$waic$waic; res_kono$dic$dic #514.1, NaN / i.e2なしだと514.5, NaN /i.e2とi.c2なしだと11439, 11415
 # res_kono2$waic$waic; res_kono2$dic$dic #640.4, 640.5 
 summary(res_kono)
 
