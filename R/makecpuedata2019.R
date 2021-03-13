@@ -161,4 +161,4 @@ for(i in 1:length(splist)){
 }
 
 setwd(dir = dir_output)
-write.csv(cpue2019, "cpue2019.csv")
+write.csv(cpue2019, "joint_cpue2019.csv")
