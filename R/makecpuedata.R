@@ -77,39 +77,3 @@ all = all %>% dplyr::rename(catch = 全銘柄, effort = 回数) %>%
 
 setwd(dir = dir_output)
 write.csv(all, "added_data.csv")
-
-
-
-
-
-
-
-
-# check spatial location -------------------------------
-require(maps)
-require(mapdata)
-library(ggrepel)
-
-p <- ggplot() + coord_fixed() +
-  xlab("Longitude") + ylab("Latitude")
-world_map <- map_data("world")
-jap <- subset(world_map, world_map$region == "Japan")
-jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
-t2 <- p + geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")+ coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
-t2 + geom_point(data = all, aes(x = lon, y = lat), shape = 16, size = 1)
-summary(all)
-
-tent = all[all$lon > 139.7, ]
-summary(tent)
-t2 + geom_point(data = tent, aes(x = lon, y = lat), shape = 16, size = 1)
-
-ue = tent %>% filter(lat > 35.4)
-sita = tent %>% filter(lat <= 35.4)
-t2 + geom_point(data = sita, aes(x = lon, y = lat), shape = 16, size = 1)
-summary(sita)
-sita = sita[sita$lon != max(sita$lon), ]
-t2 + geom_point(data = sita, aes(x = lon, y = lat), shape = 16, size = 1)
-
-tent2 = rbind(ue, sita)
-setwd(dir = dir_output)
-write.csv(tent, "tent.csv")
