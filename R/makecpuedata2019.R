@@ -117,8 +117,8 @@ write.csv(tent2, "tent.csv")
 
 
 # add zero data -------------------------------
-tent2 = tent2 %>% mutate(tag = paste(year, month, day, lon, lat, sep = "_"))
-# effort = tent2 %>% filter(year == 2019) %>% group_by(tag) %>% summarize(t_effort = sum(effort)) 
+tent2 = tent2 %>% mutate(tag = paste(year, formatC(tent2$month, width=2, flag="0"), formatC(tent2$day, width=2, flag="0"), format(as.numeric(str_sub(tent2$lon, 1, 8)), nsmall = 4), format(as.numeric(str_sub(tent2$lat, 1, 8)), nsmall = 4), sep = "_"))
+effort = tent2 %>% filter(year == 2019) %>% group_by(tag) %>% summarize(m_effort = mean(effort)) 
 # tent3 = left_join(tent2 %>% filter(year == 2019), effort, by = "tag")
 
 splist = unique(tent2$sp)
@@ -127,13 +127,38 @@ for(i in 1:length(splist)){
          tent2 %>% filter(sp == splist[i]))
 }
 
-test = left_join(konosiro %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), 
-                 suzuki %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), by = "tag", all = T)
+# test = left_join(konosiro %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), 
+#                  suzuki %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), by = "tag", all = T)
 
 tent3 = tent2 %>% filter(year == 2019)
-taglist = data.frame(tag = tent3$tag)
-test = left_join(taglist, konosiro %>% filter(year == 2019), by = "tag", all = T)
+taglist = data.frame(tag = unique(tent3$tag)) 
+taglist = taglist %>% 
+  mutate(year = as.numeric(str_sub(tag, 1, 4)), month = as.numeric(str_sub(tag, 6, 7)), day = as.numeric(str_sub(tag, 9, 10)), 
+         lon = as.numeric(str_sub(tag, 12, 19)), lat = as.numeric(str_sub(tag, 21, 28)))
+taglist = left_join(taglist, effort, by = "tag")
 
+# konosiro = left_join(taglist, konosiro %>% select(-year, -month, -day, -lon, -lat), by = "tag", all = T) %>% select(-tag) %>% mutate(sp = "konosiro")
+# kono1 = konosiro %>% select(- CPUE, -catch)
+# kono2 = konosiro %>% select(CPUE, catch)
+# kono2[is.na(kono2)] = 0
+# kono = cbind(kono1, kono2)
 
+splist = unique(tent3$sp)
+for(i in 1:length(splist)){
+  sp = tent3 %>% filter(sp == splist[i])
+  sp = left_join(taglist, sp %>% select(-year, -month, -day, -lon, -lat), by = "tag", all = T) %>% select(-tag) %>% mutate(sp = paste0(splist[i]))
+  sp1 = sp %>% select(- CPUE, -catch)
+  sp2 = sp %>% select(CPUE, catch)
+  sp2[is.na(sp2)] = 0
+  assign(paste(splist[i]),
+         cbind(sp1, sp2))
+}
 
+cpue2019 = NULL
+for(i in 1:length(splist)){
+  temp = get(splist[i])
+  cpue2019 = rbind(cpue2019, temp)
+}
 
+setwd(dir = dir_output)
+write.csv(cpue2019, "cpue2019.csv")
