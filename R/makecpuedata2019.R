@@ -103,6 +103,8 @@ tent = all[all$lon > 139.7, ]
 summary(tent)
 t2 + geom_point(data = tent, aes(x = lon, y = lat), shape = 16, size = 1)
 
+tent = all[all$lon < 140.2, ] #地図の外にもデータがあるっぽい
+
 ue = tent %>% filter(lat > 35.4)
 sita = tent %>% filter(lat <= 35.4)
 t2 + geom_point(data = sita, aes(x = lon, y = lat), shape = 16, size = 1)
