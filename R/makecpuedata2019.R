@@ -112,4 +112,28 @@ t2 + geom_point(data = sita, aes(x = lon, y = lat), shape = 16, size = 1)
 
 tent2 = rbind(ue, sita)
 setwd(dir = dir_output)
-write.csv(tent, "tent.csv")
+write.csv(tent2, "tent.csv")
+
+
+
+# add zero data -------------------------------
+tent2 = tent2 %>% mutate(tag = paste(year, month, day, lon, lat, sep = "_"))
+# effort = tent2 %>% filter(year == 2019) %>% group_by(tag) %>% summarize(t_effort = sum(effort)) 
+# tent3 = left_join(tent2 %>% filter(year == 2019), effort, by = "tag")
+
+splist = unique(tent2$sp)
+for(i in 1:length(splist)){
+  assign(paste(splist[i]),
+         tent2 %>% filter(sp == splist[i]))
+}
+
+test = left_join(konosiro %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), 
+                 suzuki %>% filter(year == 2019) %>% select(tag, effort, CPUE, catch), by = "tag", all = T)
+
+tent3 = tent2 %>% filter(year == 2019)
+taglist = data.frame(tag = tent3$tag)
+test = left_join(taglist, konosiro %>% filter(year == 2019), by = "tag", all = T)
+
+
+
+
