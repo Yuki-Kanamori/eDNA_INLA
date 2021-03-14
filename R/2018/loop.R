@@ -1,4 +1,5 @@
 df_env = NULL
+df_waic = NULL
 splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
@@ -319,6 +320,10 @@ for(i in 1:length(splist)){
   labs = labs(x = "Environmental variable", y = "Effect of environment", title = "konosiro")
   env = g+l+f+labs+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
+
+  waic = data.frame(waic = res_kono$waic$waic, sp = paste0(splist[i]))
+  df_waic = rbind(df_waic, waic)
 }
 
 write.csv(df_env, "df_env.csv")
+write.csv(df_waic, "df_waic.csv")
