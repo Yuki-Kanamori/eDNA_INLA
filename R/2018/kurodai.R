@@ -22,8 +22,9 @@ edna = (e_fish$count > 0) + 0
 c_fish = data %>% filter(sp == "kurodai")
 # c_mako = data %>% filter(FISH == "makogarei", Y == 2018, M > 2) #eDNAと月を揃えた方が良い？
 summary(c_fish)
-catch = (c_fish$catch > 0) + 0
-# catch = (c_fish$CPUE > 0) + 0
+c_fish$cpue = c_fish$catch/c_fish$m_effort
+# catch = (c_fish$catch > 0) + 0
+catch = (c_fish$cpue > 0) + 0
 summary(catch)
 
 # e_fish = e_fish %>% mutate(Month = as.factor(month))
@@ -124,7 +125,7 @@ na = as.matrix(cbind(rep(NA, nrow(coop)), rep(NA, nrow(coop))))
 ep_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                     A = list(Ap, 1),
                     effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), 
-                                   list(eb.0 = rep(1, nrow(coop)), temp = rep(1, nrow(coop)), salinity = rep(1, nrow(coop)), DO = rep(1, nrow(coop)), pH = rep(1, nrow(coop)))
+                                   list(eb.0 = rep(1, nrow(coop)), temp = rep(1, nrow(coop)), salinity = rep(1, nrow(coop)), pH = rep(1, nrow(coop)))
                     ),
                     tag = "ep_dat")
 
@@ -146,8 +147,8 @@ stk_catch = inla.stack(c_stk, cp_stk)
 stk = inla.stack(stk_edna, stk_catch)
 
 # formula
-#formula = y ~ 0 + cb.0 + eb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
-formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
+formula = y ~ 0 + cb.0 + eb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
+#formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
 # formula = y ~ 0 + eb.0 + cb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.e, model = spde) + f(i.c, copy = "i.e", fixed = FALSE) + f(effort, model = "rw1")
 
 
@@ -167,9 +168,12 @@ res_kuro = inla(formula,
 #                 control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
 #                 control.compute = list(waic = TRUE, dic = TRUE))
 
-res_kuro$waic$waic; res_kuro$dic$dic #2776, 2766
+res_kuro$waic$waic; res_kuro$dic$dic #2776, 2766 catch+offcet(effort)
+res_kuro$waic$waic; res_kuro$dic$dic #1076, 1077 DO抜き+スケーリング+CPUE
 # res_kono2$waic$waic; res_kono2$dic$dic #640.4, 640.5 
 summary(res_kuro)
+setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0314")
+save(res_kuro, file = "kuro.Rdata")
 
 # plot the fitted values on a map -------------------------------
 best_kono = res_kuro
@@ -372,7 +376,7 @@ grid.arrange(m, sd, ncol = 2)
 
 effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "temp"),
                data.frame(x = best_kono$summary.random$salinity$ID, y = best_kono$summary.random$salinity$mean, variable = "sal"),
-               data.frame(x = best_kono$summary.random$DO$ID, y = best_kono$summary.random$DO$mean, variable = "do"),
+               #data.frame(x = best_kono$summary.random$DO$ID, y = best_kono$summary.random$DO$mean, variable = "do"),
                data.frame(x = best_kono$summary.random$pH$ID, y = best_kono$summary.random$pH$mean, variable = "ph"))
 effect = effect %>% filter(x != 1)
 effect$variable = factor(effect$variable, levels = c("temp", "sal", "do", "ph"))
@@ -381,3 +385,4 @@ l = geom_line()
 f = facet_wrap(~ variable, scales = "free")
 labs = labs(x = "Environmental variable", y = "Effect of environment", title = "konosiro")
 g+l+f+labs+theme_bw()
+summary(e_fish$pH)
