@@ -1,4 +1,4 @@
-# path_nasi = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし"
+path_nasi = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし"
 # files1 = list.files(path_nasi, pattern = ".Rdata")
 
 
@@ -9,7 +9,7 @@ df1 = NULL
 df2 = NULL
 df3 = NULL
 
-for(i in 1:length(splist[i])){
+for(i in 1:length(splist)){
   setwd("/Users/Yuki/Dropbox/eDNA_INLA")
   
   require(INLA)
@@ -161,7 +161,8 @@ for(i in 1:length(splist[i])){
   
   stk = inla.stack(stk_edna, stk_catch)
   
-  file = list.files(path_nasi, pattern = paste0(splist[i]))
+  file = list.files(path_nasi, pattern = paste0(splist[i], ".Rdata"))
+  setwd(dir = path_nasi)
   load(file)
   
   best_kono = res
@@ -194,7 +195,7 @@ for(i in 1:length(splist[i])){
   dpm_e$variable = as.factor(dpm_e$variable)
   dpm_c$variable = as.factor(dpm_c$variable)
   dpm = rbind(dpm_e, dpm_c)
-  dpm$sp == paste0(splist[i])
+  dpm$sp = paste0(splist[i])
   df_dpm = rbind(df_dpm, dpm)
   
   
