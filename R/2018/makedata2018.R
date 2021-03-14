@@ -92,6 +92,7 @@ setwd("/Users/Yuki/Dropbox/Network2020")
 data = read.csv("VASTdata.csv") %>% filter(Y == 2018)
 head(data, 2)
 summary(data)
+unique(data$FISH)
 # data = data %>% mutate(lon = Lon %/% 1 + (Lon %% 1)*60 + 0.05, lat = Lat %/% 1 + (Lat %% 1)*60 + 0.05)
 
 setwd("/Users/Yuki/Dropbox/eDNA_INLA")
