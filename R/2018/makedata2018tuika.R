@@ -1,5 +1,5 @@
 dir_input = "/Users/Yuki/Dropbox/Network/千葉追加データ"
-dir_output = "/Users/Yuki/Dropbox/eDNA_INLA/cpue2019/"
+dir_output = "/Users/Yuki/Dropbox/eDNA_INLA/"
 
 require(tidyverse)
 require(openxlsx)
