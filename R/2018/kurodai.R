@@ -148,7 +148,7 @@ stk = inla.stack(stk_edna, stk_catch)
 
 # formula
 formula = y ~ 0 + cb.0 + eb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
-#formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
+formula = y ~ 0 + cb.0 + eb.0 + offset(effort) + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(pH, model = "rw1") + f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + f(i.c2, model = spde) + f(i.e2, model = spde)
 # formula = y ~ 0 + eb.0 + cb.0 + f(temp, model = "rw1") + f(salinity, model = "rw1") + f(DO, model = "rw1") + f(pH, model = "rw1") + f(i.e, model = spde) + f(i.c, copy = "i.e", fixed = FALSE) + f(effort, model = "rw1")
 
 
@@ -170,6 +170,7 @@ res_kuro = inla(formula,
 
 res_kuro$waic$waic; res_kuro$dic$dic #2776, 2766 catch+offcet(effort)
 res_kuro$waic$waic; res_kuro$dic$dic #1076, 1077 DO抜き+スケーリング+CPUE
+res_kuro$waic$waic; res_kuro$dic$dic # 7796, 7792 DO抜き+スケーリング+catch+offcet(effort)
 # res_kono2$waic$waic; res_kono2$dic$dic #640.4, 640.5 
 summary(res_kuro)
 setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0314")
@@ -385,4 +386,4 @@ l = geom_line()
 f = facet_wrap(~ variable, scales = "free")
 labs = labs(x = "Environmental variable", y = "Effect of environment", title = "konosiro")
 g+l+f+labs+theme_bw()
-summary(e_fish$pH)
+
