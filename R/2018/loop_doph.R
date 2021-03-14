@@ -134,8 +134,7 @@ for(i in 1:length(splist)){
   ep_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                       A = list(Ap, 1),
                       effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), 
-                                     list(eb.0 = rep(1, nrow(coop)), temp = rep(1, nrow(coop)), salinity = rep(1, nrow(coop))))
-                      ),
+                                     list(eb.0 = rep(1, nrow(coop)), temp = rep(1, nrow(coop)), salinity = rep(1, nrow(coop)))),
                       tag = "ep_dat")
   
   stk_edna = inla.stack(e_stk, ep_stk)
