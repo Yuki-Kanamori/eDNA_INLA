@@ -320,3 +320,5 @@ for(i in 1:length(splist)){
   env = g+l+f+labs+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
 }
+
+write.csv(df_env, "df_env.csv")
