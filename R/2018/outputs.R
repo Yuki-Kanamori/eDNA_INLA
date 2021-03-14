@@ -98,7 +98,7 @@ edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
 g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = prob))
 t = geom_tile()
 c = coord_fixed(ratio = 1)
-s = scale_fill_gradient(name = "Occurrence", low = "white", high = "orange")
+s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
 catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
 
 ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
