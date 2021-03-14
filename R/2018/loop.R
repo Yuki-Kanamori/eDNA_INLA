@@ -1,4 +1,5 @@
 df_env = NULL
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
   setwd("/Users/Yuki/Dropbox/eDNA_INLA")
@@ -8,7 +9,6 @@ for(i in 1:length(splist)){
   require(openxlsx)
   
   # 2018 ----------------------------------------------------------
-  splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimori-rui")
   
   # eDNA & env ----------------------------------------------------------
   # データは4~12月，神奈川は地点によって調査がなかった月がある
@@ -18,21 +18,22 @@ for(i in 1:length(splist)){
   # データは1-12月
   if(i < 6){
     data = read.csv("joint_cpue2018.csv")
+    data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
   }else{
     data = read.csv("joint_cpue2018_tuikasp.csv")
+    data$cpue = data$catch/data$m_effort
   }
   
   
   
   # select species ------------------------------------------------
-  e_fish = mifish %>% filter(sp == paste0(splist[i]), layer == "B")
+  e_fish = mifish %>% filter(sp_group == paste0(splist[i]), layer == "B")
   summary(e_fish)
   edna = (e_fish$count > 0) + 0
   
   c_fish = data %>% filter(sp == paste0(splist[i]))
   # c_mako = data %>% filter(FISH == "makogarei", Y == 2018, M > 2) #eDNAと月を揃えた方が良い？
   summary(c_fish)
-  c_fish$cpue = c_fish$catch/c_fish$m_effort
   # catch = (c_fish$catch > 0) + 0
   catch = (c_fish$cpue > 0) + 0
   summary(catch)
@@ -141,13 +142,12 @@ for(i in 1:length(splist)){
   #cpue
   c_stk = inla.stack(data = list(y = cbind(NA, catch)),
                      A = list(c_A, 1),
-                     effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), list(cb.0 = rep(1, length(catch)), effort = c_fish$m_effort)),
+                     effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), list(cb.0 = rep(1, length(catch)))),
                      tag = "c_dat")
   cp_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                       A = list(Ap, 1),
                       effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), 
-                                     list(cb.0 = rep(1, nrow(coop)), effort = rep(1, nrow(coop)))
-                      ),
+                                     list(cb.0 = rep(1, nrow(coop)))),
                       tag = "cp_dat")
   stk_catch = inla.stack(c_stk, cp_stk)
   
@@ -319,6 +319,4 @@ for(i in 1:length(splist)){
   labs = labs(x = "Environmental variable", y = "Effect of environment", title = "konosiro")
   env = g+l+f+labs+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
-  
-  rm(list =ls())
 }
