@@ -1,4 +1,4 @@
-setwd("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし")
+# setwd("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし")
 
 
 # do なし ---------------------------------------------------------
@@ -34,9 +34,9 @@ df_model = rbind(df_waic1, df_waic2)
 
 # 作図 ------------------------------------------------------------
 # environmental factors
-env = read.csv(paste0(path_nasi, "/df_env.csv"))
-env = env %>% mutate(variable = ifelse(env$variable == "ph", "pH", ifelse(env$variable == "temp", "Temperature", "Salinity")))
-env$variable = factor(env$variable, levels = c("Temperature", "Salinity", "pH"))
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+env = read.csv(paste0(path_nasi2, "/df_env.csv"))
+env = env %>% mutate(variable = ifelse(env$variable == "Temp", "Temperature", "Salinity"))
 
 # all
 g = ggplot(env, aes(x = x, y = y, color = sp))
@@ -59,22 +59,22 @@ f = facet_wrap(~ sp, scales = "free", ncol = 4)
 labs = labs(x = "Salinity (scaled)", y = "Effect of environment", color = "Species")
 fig_env_sal = g+l+f+labs+theme_bw()
 
-# pH
-g = ggplot(env %>% filter(variable == "pH"), aes(x = x, y = y, color = sp))
-l = geom_line()
-f = facet_wrap(~ sp, scales = "free", ncol = 4)
-labs = labs(x = "pH (scaled)", y = "Effect of environment", color = "Species")
-fig_env_ph = g+l+f+labs+theme_bw()
+# # pH
+# g = ggplot(env %>% filter(variable == "pH"), aes(x = x, y = y, color = sp))
+# l = geom_line()
+# f = facet_wrap(~ sp, scales = "free", ncol = 4)
+# labs = labs(x = "pH (scaled)", y = "Effect of environment", color = "Species")
+# fig_env_ph = g+l+f+labs+theme_bw()
 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/temp.pdf"), plot = fig_env_temp, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/sal.pdf"), plot = fig_env_sal, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/ph.pdf"), plot = fig_env_ph, units = "in", width = 11.69, height = 8.27) 
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/temp.pdf"), plot = fig_env_temp, units = "in", width = 11.69, height = 8.27) 
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/sal.pdf"), plot = fig_env_sal, units = "in", width = 11.69, height = 8.27) 
+#ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/ph.pdf"), plot = fig_env_ph, units = "in", width = 11.69, height = 8.27) 
 
 
 
 
 # estimated eDNA & catch map ----------------------------------------------------------------
-path_nasi = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし"
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
 dpm = read.csv("df_dpm.csv")
 m_dpm = dpm %>% filter(str_detect(variable, "mean"))
 unique(m_dpm$variable)
