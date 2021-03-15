@@ -1,4 +1,4 @@
-path_nasi = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし"
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
 # files1 = list.files(path_nasi, pattern = ".Rdata")
 
 
@@ -250,7 +250,7 @@ for(i in 1:length(splist)){
 }
 
 
-setwd(dir = path_nasi)
+setwd(dir = path_nasi2)
 write.csv(df_dpm, "df_dpm.csv")
 write.csv(df1, "df_ic.csv")
 write.csv(df2, "df_ic2.csv")
