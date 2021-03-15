@@ -226,7 +226,6 @@ for(i in 1:length(splist)){
   df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
   df_ic2$mean_s = as.vector(mean_s_ic2)
   df_ic2$sd_s = as.vector(sd_s_ic2)
-  df_ic2 = df_ic2
   df_ic2$sp = paste0(splist[i])
   df2 = rbind(df2, df_ic2)
   
@@ -243,7 +242,6 @@ for(i in 1:length(splist)){
   df_ie2 = expand.grid(x = proj_e$x, y = proj_e$y)
   df_ie2$mean_s = as.vector(mean_s_ie2)
   df_ie2$sd_s = as.vector(sd_s_ie2)
-  df_ie2 = df_ie2
   df_ie2$sp = paste0(splist[i])
   df3 = rbind(df3, df_ie2)
   
