@@ -163,3 +163,41 @@ for(i in 1:length(splist)){
 }
 
 
+
+
+
+# map raw data --------------------------------------------------
+# with map
+world_map <- map_data("world")
+jap <- subset(world_map, world_map$region == "Japan")
+jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
+pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
+
+
+setwd("/Users/Yuki/Dropbox/eDNA_INLA")
+# 2018 ----------------------------------------------------------
+# eDNA & env ----------------------------------------------------------
+# データは4~12月，神奈川は地点によって調査がなかった月がある
+mifish = read.csv("joint_edna2018.csv")
+
+# catch ---------------------------------------------------------
+# データは1-12月
+data = read.csv("joint_cpue2018.csv")
+data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
+
+# select species ------------------------------------------------
+e_fish = mifish %>% filter(sp_group == "konosiro", layer == "B")
+summary(e_fish)
+
+c_fish = data %>% filter(sp == "konosiro")
+summary(c_fish)
+
+map = rbind(e_fish %>% select(lng, lat) %>% dplyr::rename(lon = lng) %>% mutate(data = "eDNA"),
+            c_fish %>% select(lon, lat) %>% mutate(data = "CPUE"))
+
+g = ggplot(data = map, aes(lon, lat, color = data))
+p = geom_point()
+raw_map = g+p+pol+c_map+theme_bw()+labs(title = "")
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/raw_map.pdf"), plot = raw_map, units = "in", width = 11.69, height = 8.27) 
+
