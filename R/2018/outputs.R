@@ -84,24 +84,82 @@ m_dpm$prob = exp(m_dpm$value)/(1+exp(m_dpm$value))
 world_map <- map_data("world")
 jap <- subset(world_map, world_map$region == "Japan")
 jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
-pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gracy 50", fill="gray 50")
 c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
 
 #eDNA
-g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = prob))
-t = geom_tile()
-c = coord_fixed(ratio = 1)
-s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
-edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
+for(i in 1:length(splist)){
+  g = ggplot(data = m_dpm %>% filter(sp == splist[i], variable == "pred_mean_eDNA"), aes(east, north, fill = prob))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  f = facet_wrap(~ sp, ncol = 4)
+  edna = g+t+c+s+f+pol+c_map+theme_bw()+labs(title = "Estimated eDNA")
+  
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+}
+
 
 #pred_mean_catch
-g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = prob))
-t = geom_tile()
-c = coord_fixed(ratio = 1)
-s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
-catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+#何か変
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
+for(i in 1:length(splist)){
+  g = ggplot(data = m_dpm %>% filter(sp == files[i], variable == "pred_mean_catch"), aes(east, north, fill = prob))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+}
 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
+
+
+
+
+# latent variables map -----------------------------------------------------------
+# distribution
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+df_ic = read.csv("df_ic.csv")
+
+require(viridis)
+require(cowplot)
+require(gridExtra)
+
+for(i in 1:length(splist)){
+  g1 = ggplot(df_ic %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
+  t = geom_tile()
+  v = scale_fill_viridis(na.value = "transparent")
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
+  
+  m = g1+t+c+v+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
+}
+
+
+# error of fisheries -----------------------------------------------
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+df_ic2 = read.csv("df_ic2.csv")
+
+require(viridis)
+require(cowplot)
+require(gridExtra)
+
+for(i in 1:length(splist)){
+  g1 = ggplot(df_ic2 %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
+  t = geom_tile()
+  v = scale_fill_viridis(na.value = "transparent")
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
+  
+  m = g1+t+c+v+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
+}
 
 

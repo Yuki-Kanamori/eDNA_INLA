@@ -179,8 +179,11 @@ To estimate the spatial distribution of four focal species using eDNA and catch 
 \mathrm{logit} \ \ p_{e}(s_{i}) = \alpha_{e} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{e}(s_{i})
 \]
 \[
-\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \beta_{i} + \theta(s_{i}) + u_{c}(s_{i})
+\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \theta(s_{i}) + u_{c}(s_{i})
 \]
+%\[
+%\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \beta_{i} + \theta(s_{i}) + u_{c}(s_{i})
+%\]
 where $\alpha$ is the intercept, and $x_{k}(s_{i})$ is the covariates at sites $i$ for occurrence probabilities of eDNA at sites $i$. In the study, seawater temperature, salinity, pH, and DO were used as covariates which effect on the occurrence of eDNA (i.e., $k = 4$). $u(s_{i})$ is spatial error that is specific for each data following multivariate normal distributions $\mathrm{MVN}(0, \mathbf{R})$, where the variance--covariance matrix $\mathbf{R}$ is a Mat\'{e}rn correlation function. $\theta$ which is shared between eDNA and catch is the common spatial pattern between the two data, which cannot explain by each terms of the equations. That is, $\theta$ can be interpreted as the spatial distribution of species we want to know. \textcolor{red}{共変量の非線形性について書く}Parameters in this model was estimated by Integrated Nested Laplace Approximation using using the R-INLA package (Lindgren, 2012) in \textcolor{red}{R 3.6.1 (R Development Core Team, 2019).}
 \ \ \ \ \ \ \ \ \ \ 
 
