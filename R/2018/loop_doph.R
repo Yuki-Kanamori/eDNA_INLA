@@ -173,7 +173,11 @@ for(i in 1:length(splist)){
   res[[53]] = "cpue+scaled(env)-do-ph"
   res[[54]] = paste0(splist[i])
   
-  setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0314")
+  
+  
+  
+  
+  setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0317")
   save(res, file = paste0(splist[i], ".Rdata"))
   
   best_kono = res
