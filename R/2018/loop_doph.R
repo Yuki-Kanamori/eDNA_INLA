@@ -251,8 +251,8 @@ for(i in 1:length(splist)){
   t = geom_tile()
   v = scale_fill_viridis(na.value = "transparent")
   c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
@@ -274,8 +274,8 @@ for(i in 1:length(splist)){
   t = geom_tile()
   v = scale_fill_viridis(na.value = "transparent")
   c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
@@ -297,8 +297,8 @@ for(i in 1:length(splist)){
   t = geom_tile()
   v = scale_fill_viridis(na.value = "transparent")
   c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u1")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "Mean_u1")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
