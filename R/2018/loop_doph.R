@@ -1,5 +1,9 @@
 df_env = NULL
 df_waic = NULL
+df_dpm = NULL
+df1 = NULL
+df2 = NULL
+df3 = NULL
 splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
@@ -210,6 +214,8 @@ for(i in 1:length(splist)){
   dpm = rbind(dpm_e, dpm_c)
   m_dpm = dpm %>% filter(str_detect(variable, "mean"))
   unique(m_dpm$variable)
+  dpm$sp = paste0(splist[i])
+  df_dpm = rbind(df_dpm, dpm)
   
   #eDNA
   g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = value))
@@ -256,6 +262,9 @@ for(i in 1:length(splist)){
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
+  df_ic = df_ie
+  df_ic$sp = paste0(splist[i])
+  df1 = rbind(df1, df_ic)
   
   # latent fisheries pattern -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
@@ -279,6 +288,8 @@ for(i in 1:length(splist)){
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
+  df_ic2$sp = paste0(splist[i])
+  df2 = rbind(df2, df_ic2)
   
   # latent pom pattern -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
@@ -302,6 +313,8 @@ for(i in 1:length(splist)){
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
+  df_ie2$sp = paste0(splist[i])
+  df3 = rbind(df3, df_ie2)
   
   # environmental effect -----------------------------------------------------------
   effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "Temp"),
