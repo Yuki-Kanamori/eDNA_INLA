@@ -11,7 +11,7 @@ require(abind)
 # (catch only data; not include zero data) ----------------------------------------------------------
 setwd(dir = dir_input)
 path = dir_input
-files = list.files(path)
+files = list.files(path, pattern = ".xlsx")
 
 all = NULL
 for(i in 1:length(files)){
@@ -83,7 +83,8 @@ t2 + geom_point(data = tent, aes(x = lon, y = lat), shape = 16, size = 1)
 write.csv(tent, "tent.csv")
 
 # add zero data -------------------------------
-tent2 = tent %>% mutate(tag = paste(year, formatC(tent2$month, width=2, flag="0"), formatC(tent2$day, width=2, flag="0"), format(as.numeric(str_sub(tent2$lon, 1, 8)), nsmall = 4), format(as.numeric(str_sub(tent2$lat, 1, 8)), nsmall = 4), sep = "_"))
+# tent2 = tent %>% mutate(tag = paste(year, formatC(tent2$month, width=2, flag="0"), formatC(tent2$day, width=2, flag="0"), format(as.numeric(str_sub(tent2$lon, 1, 8)), nsmall = 4), format(as.numeric(str_sub(tent2$lat, 1, 8)), nsmall = 4), sep = "_"))
+tent2 = tent %>% mutate(tag = paste(year, formatC(tent$month, width=2, flag="0"), formatC(tent$day, width=2, flag="0"), format(as.numeric(str_sub(tent$lon, 1, 8)), nsmall = 4), format(as.numeric(str_sub(tent$lat, 1, 8)), nsmall = 4), sep = "_"))
 effort = tent2 %>% filter(year == 2018) %>% group_by(tag) %>% summarize(m_effort = mean(effort)) 
 # tent3 = left_join(tent2 %>% filter(year == 2019), effort, by = "tag")
 
@@ -110,6 +111,7 @@ summary(old)
 unique(old$FISH)
 old = old %>% mutate(tag = paste(Y, formatC(old$M, width=2, flag="0"), formatC(old$D, width=2, flag="0"), format(as.numeric(str_sub(old$Lon, 1, 8)), nsmall = 4), format(as.numeric(str_sub(old$Lat, 1, 8)), nsmall = 4), sep = "_"))
 effort = old %>% group_by(tag) %>% summarize(m_effort = mean(NUM)) 
+unique(old$M)
 
 taglist = data.frame(tag = unique(old$tag)) 
 taglist = taglist %>% 
@@ -126,8 +128,10 @@ taglist = left_join(taglist, effort, by = "tag")
 tent3 = tent2
 splist = unique(tent3$sp)
 for(i in 1:length(splist)){
-  sp = tent3 %>% filter(sp == splist[i])
-  sp = left_join(taglist, sp %>% select(-year, -month, -day, -lon, -lat), by = "tag", all = T) %>% select(-tag) %>% mutate(sp = paste0(splist[i]))
+  sp = tent3 %>% filter(sp == splist[i]) %>% filter(year == 2018)
+  sp = left_join(taglist, sp %>% select(-year, -month, -day, -lon, -lat), by = "tag", all = T)
+  
+  %>% select(-tag) %>% mutate(sp = paste0(splist[i]))
   sp1 = sp %>% select(- CPUE, -catch)
   sp2 = sp %>% select(CPUE, catch)
   sp2[is.na(sp2)] = 0
