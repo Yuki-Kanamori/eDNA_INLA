@@ -341,3 +341,7 @@ for(i in 1:length(splist)){
 
 write.csv(df_env, "df_env.csv")
 write.csv(df_waic, "df_waic.csv")
+write.csv(df_dpm, "df_dist.csv")
+write.csv(df1, "df_ic.csv")
+write.csv(df2, "df_ic2.csv")
+write.csv(df3, "df_ie.csv")
