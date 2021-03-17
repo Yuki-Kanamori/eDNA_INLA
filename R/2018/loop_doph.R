@@ -25,7 +25,7 @@ for(i in 1:length(splist)){
     data = read.csv("joint_cpue2018.csv")
     data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
   }else{
-    data = read.csv("joint_cpue2018_tuikasp.csv")
+    data = read.csv("joint_cpue2018_tuikasp2.csv")
     data$cpue = data$catch/data$m_effort
   }
   
