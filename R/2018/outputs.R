@@ -130,12 +130,11 @@ require(gridExtra)
 for(i in 1:length(splist)){
   g1 = ggplot(df_ic %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
   t = geom_tile()
-  v = scale_fill_viridis(na.value = "transparent")
   c = coord_fixed(ratio = 1)
-  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  s = scale_fill_gradient(name = "", low = "white", high = "red")
   labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
   
-  m = g1+t+c+v+pol+c_map+labs1+theme_bw()
+  m = g1+t+c+s+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
 }
@@ -143,7 +142,7 @@ for(i in 1:length(splist)){
 
 # error of fisheries -----------------------------------------------
 path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
-df_ic2 = read.csv("df_ic2.csv")
+df_ic2 = read.csv(paste0(path_nasi2, "/df_ic2.csv"))
 
 require(viridis)
 require(cowplot)
@@ -152,12 +151,11 @@ require(gridExtra)
 for(i in 1:length(splist)){
   g1 = ggplot(df_ic2 %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
   t = geom_tile()
-  v = scale_fill_viridis(na.value = "transparent")
   c = coord_fixed(ratio = 1)
-  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  s = scale_fill_gradient(name = "", low = "white", high = "red")
   labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
   
-  m = g1+t+c+v+pol+c_map+labs1+theme_bw()
+  m = g1+t+c+s+pol+c_map+labs1+theme_bw()
   ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
 }
