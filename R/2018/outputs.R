@@ -34,7 +34,7 @@ df_model = rbind(df_waic1, df_waic2)
 
 # 作図 ------------------------------------------------------------
 # environmental factors
-path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0317"
 env = read.csv(paste0(path_nasi2, "/df_env.csv"))
 env = env %>% mutate(variable = ifelse(env$variable == "Temp", "Temperature", "Salinity"))
 
@@ -74,7 +74,7 @@ ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/sal.pdf")
 
 
 # estimated eDNA & catch map ----------------------------------------------------------------
-path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0317"
 dpm = read.csv("df_dpm.csv")
 m_dpm = dpm %>% filter(str_detect(variable, "mean"))
 unique(m_dpm$variable)
@@ -84,7 +84,7 @@ m_dpm$prob = exp(m_dpm$value)/(1+exp(m_dpm$value))
 world_map <- map_data("world")
 jap <- subset(world_map, world_map$region == "Japan")
 jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
-pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gracy 50", fill="gray 50")
+pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
 c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
 
 #eDNA
@@ -97,7 +97,7 @@ for(i in 1:length(splist)){
   f = facet_wrap(~ sp, ncol = 4)
   edna = g+t+c+s+f+pol+c_map+theme_bw()+labs(title = "Estimated eDNA")
   
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0317/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
 }
 
 
