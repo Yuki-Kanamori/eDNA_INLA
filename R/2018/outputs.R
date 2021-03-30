@@ -75,7 +75,7 @@ ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/sal.pdf")
 
 # estimated eDNA & catch map ----------------------------------------------------------------
 path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0317"
-dpm = read.csv("df_dpm.csv")
+dpm = read.csv(paste0(path_nasi2, "/df_dpm.csv"))
 m_dpm = dpm %>% filter(str_detect(variable, "mean"))
 unique(m_dpm$variable)
 m_dpm$prob = exp(m_dpm$value)/(1+exp(m_dpm$value))
@@ -92,7 +92,7 @@ splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", 
 for(i in 1:length(splist)){
   g = ggplot(data = m_dpm %>% filter(sp == splist[i], variable == "pred_mean_eDNA"), aes(east, north, fill = prob))
   t = geom_tile()
-  c = coord_fixed(ratio = 1)
+  c = coord_fixed(ratio = 1) #必要？？
   s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
   f = facet_wrap(~ sp, ncol = 4)
   edna = g+t+c+s+f+pol+c_map+theme_bw()+labs(title = "Estimated eDNA")
