@@ -13,6 +13,10 @@ edna = edna %>% gather(key = zotu, value = count, 6:ncol(edna))
 analize = data.frame(zotu = c("Zotu62", "Zotu59", "Zotu120", "Zotu6", "Zotu1", "Zotu13", "Zotu14", "Zotu137", "Zotu23", "Zotu64", "Zotu48"), sp = c("maanago", "makogarei", "isigarei", "suzuki", "konosiro", "kurodai", "siroguti", "nibe", "akakamasu", "yamatokamasu", "kurosibikamasu"), sp_group = c("maanago", "makogarei", "isigarei", "suzuki", "konosiro", "kurodai", "isimoti-rui", "isimoti-rui", "kamasu-rui", "kamasu-rui", "kamasu-rui"))
 edna2 = edna %>% filter(zotu %in% analize$zotu)
 edna2 = merge(edna2, analize, by = "zotu")
+
+#クロシビカマスの除去
+edna2 = edna2 %>% filter(sp != "kurosibikamasu")
+(unique(edna2$sp))
 (unique(edna2$site))
 
 lonlat = read.table("2018/sampling_points.txt", header = T)
