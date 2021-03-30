@@ -171,14 +171,14 @@ for(i in 1:length(splist)){
              control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
              control.compute = list(waic = TRUE, dic = TRUE))
   
-  res[[53]] = "cpue+scaled(env)-do-ph"
+  res[[53]] = "cpue+scaled(temp, sal)"
   res[[54]] = paste0(splist[i])
   
   
   
   
   
-  dir_save = paste0(dirname, "/", Sys.Date())
+  dir_save = paste0(dirname, "/", Sys.Date(), "tempsal")
   dir.create(dir_save)
   setwd(dir = dir_save)
   save(res, file = paste0(splist[i], ".Rdata"))
