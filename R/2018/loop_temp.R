@@ -210,12 +210,12 @@ for(i in 1:length(splist)){
   dpm_e$variable = as.factor(dpm_e$variable)
   dpm_c$variable = as.factor(dpm_c$variable)
   
-  # with map
-  world_map <- map_data("world")
-  jap <- subset(world_map, world_map$region == "Japan")
-  jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
-  pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
-  c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
+  # # with map
+  # world_map <- map_data("world")
+  # jap <- subset(world_map, world_map$region == "Japan")
+  # jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
+  # pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+  # c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
   
   dpm = rbind(dpm_e, dpm_c)
   m_dpm = dpm %>% filter(str_detect(variable, "mean"))
@@ -223,22 +223,22 @@ for(i in 1:length(splist)){
   dpm$sp = paste0(splist[i])
   df_dpm = rbind(df_dpm, dpm)
   
-  #eDNA
-  g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = value))
-  t = geom_tile()
-  c = coord_fixed(ratio = 1)
-  s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
-  edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
-  
-  #pred_mean_catch
-  g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = value))
-  t = geom_tile()
-  c = coord_fixed(ratio = 1)
-  s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
-  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
-  
-  ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
-  ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
+  # #eDNA
+  # g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = value))
+  # t = geom_tile()
+  # c = coord_fixed(ratio = 1)
+  # s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  # edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  # 
+  # #pred_mean_catch
+  # g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = value))
+  # t = geom_tile()
+  # c = coord_fixed(ratio = 1)
+  # s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  # catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  # 
+  # ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  # ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
   
   
   # projecting the spatial field ----------------------------------
@@ -253,20 +253,20 @@ for(i in 1:length(splist)){
   df_ie$mean_s = as.vector(mean_s_ie)
   df_ie$sd_s = as.vector(sd_s_ie)
   
-  require(viridis)
-  require(cowplot)
-  require(gridExtra)
-  
-  g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
-  g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
-  # r = geom_raster()
-  t = geom_tile()
-  v = scale_fill_viridis(na.value = "transparent")
-  c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
-  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  # require(viridis)
+  # require(cowplot)
+  # require(gridExtra)
+  # 
+  # g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
+  # g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
+  # # r = geom_raster()
+  # t = geom_tile()
+  # v = scale_fill_viridis(na.value = "transparent")
+  # c = coord_fixed(ratio = 1)
+  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
+  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
+  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ic = df_ie
   df_ic$sp = paste0(splist[i])
@@ -283,16 +283,16 @@ for(i in 1:length(splist)){
   df_ic2$mean_s = as.vector(mean_s_ic2)
   df_ic2$sd_s = as.vector(sd_s_ic2)
   
-  g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
-  g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
-  # r = geom_raster()
-  t = geom_tile()
-  v = scale_fill_viridis(na.value = "transparent")
-  c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
-  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  # g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
+  # g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
+  # # r = geom_raster()
+  # t = geom_tile()
+  # v = scale_fill_viridis(na.value = "transparent")
+  # c = coord_fixed(ratio = 1)
+  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
+  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
+  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ic2$sp = paste0(splist[i])
   df2 = rbind(df2, df_ic2)
@@ -308,39 +308,39 @@ for(i in 1:length(splist)){
   df_ie2$mean_s = as.vector(mean_s_ie2)
   df_ie2$sd_s = as.vector(sd_s_ie2)
   
-  g1 = ggplot(df_ie2, aes(x = x, y = y, fill = mean_s_ie))
-  g2 = ggplot(df_ie2, aes(x = x, y = y, fill = sd_s_ie))
-  # r = geom_raster()
-  t = geom_tile()
-  v = scale_fill_viridis(na.value = "transparent")
-  c = coord_fixed(ratio = 1)
-  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u1")
-  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "Mean_u1")
-  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0(dir_save, "/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  # g1 = ggplot(df_ie2, aes(x = x, y = y, fill = mean_s_ie))
+  # g2 = ggplot(df_ie2, aes(x = x, y = y, fill = sd_s_ie))
+  # # r = geom_raster()
+  # t = geom_tile()
+  # v = scale_fill_viridis(na.value = "transparent")
+  # c = coord_fixed(ratio = 1)
+  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u1")
+  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "Mean_u1")
+  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # ggsave(file = paste0(dir_save, "/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ie2$sp = paste0(splist[i])
   df3 = rbind(df3, df_ie2)
   
   # environmental effect -----------------------------------------------------------
-  effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "Temp"),
-                 data.frame(x = best_kono$summary.random$salinity$ID, y = best_kono$summary.random$salinity$mean, variable = "Sal"))
+  effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "Temp"))
   effect = effect %>% filter(x != 1)
-  effect$variable = factor(effect$variable, levels = c("Temp", "Sal"))
+  effect$variable = factor(effect$variable, levels = c("Temp"))
   effect$sp = paste0(splist[i])
   df_env = rbind(df_env, effect)
   
-  g = ggplot(effect, aes(x = x, y = y))
-  l = geom_line()
-  f = facet_wrap(~ variable, scales = "free")
-  labs = labs(x = "Environmental variable", y = "Effect of environment", title = paste0(splist[i]))
-  env = g+l+f+labs+theme_bw()
-  ggsave(file = paste0(dir_save, "/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
+  # g = ggplot(effect, aes(x = x, y = y))
+  # l = geom_line()
+  # f = facet_wrap(~ variable, scales = "free")
+  # labs = labs(x = "Environmental variable", y = "Effect of environment", title = paste0(splist[i]))
+  # env = g+l+f+labs+theme_bw()
+  # ggsave(file = paste0(dir_save, "/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
   
   waic = data.frame(waic = res$waic$waic, sp = paste0(splist[i]))
   df_waic = rbind(df_waic, waic)
 }
 
+setwd(dir = dir_save)
 write.csv(df_env, "df_env.csv")
 write.csv(df_waic, "df_waic.csv")
 write.csv(df_dpm, "df_dpm.csv")
