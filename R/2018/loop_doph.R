@@ -7,7 +7,8 @@ df3 = NULL
 splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
-  setwd("/Users/Yuki/Dropbox/eDNA_INLA")
+  dirname = "/Users/Yuki/Dropbox/eDNA_INLA"
+  setwd(dir = dirname)
   
   require(INLA)
   require(tidyverse)
@@ -177,7 +178,9 @@ for(i in 1:length(splist)){
   
   
   
-  setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0317")
+  dir_save = paste0(dirname, "/", Sys.Date())
+  dir.create(dir_save)
+  setwd(dir = dir_save)
   save(res, file = paste0(splist[i], ".Rdata"))
   
   best_kono = res
@@ -235,8 +238,8 @@ for(i in 1:length(splist)){
   s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
   catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
   
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
   
   
   # projecting the spatial field ----------------------------------
@@ -264,7 +267,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ic = df_ie
   df_ic$sp = paste0(splist[i])
@@ -290,7 +293,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ic2$sp = paste0(splist[i])
   df2 = rbind(df2, df_ic2)
@@ -315,7 +318,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u1")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "Mean_u1")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   df_ie2$sp = paste0(splist[i])
   df3 = rbind(df3, df_ie2)
@@ -333,7 +336,7 @@ for(i in 1:length(splist)){
   f = facet_wrap(~ variable, scales = "free")
   labs = labs(x = "Environmental variable", y = "Effect of environment", title = paste0(splist[i]))
   env = g+l+f+labs+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
   
   waic = data.frame(waic = res$waic$waic, sp = paste0(splist[i]))
   df_waic = rbind(df_waic, waic)
