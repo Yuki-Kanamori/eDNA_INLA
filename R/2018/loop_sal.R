@@ -171,7 +171,7 @@ for(i in 1:length(splist)){
              control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
              control.compute = list(waic = TRUE, dic = TRUE))
   
-  res[[53]] = "cpue+scaled(temp, sal)"
+  res[[53]] = "scaled(sal)"
   res[[54]] = paste0(splist[i])
   
   
