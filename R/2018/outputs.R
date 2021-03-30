@@ -1,4 +1,4 @@
-setwd("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし")
+# setwd("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし")
 
 
 # do なし ---------------------------------------------------------
@@ -34,9 +34,9 @@ df_model = rbind(df_waic1, df_waic2)
 
 # 作図 ------------------------------------------------------------
 # environmental factors
-env = read.csv(paste0(path_nasi, "/df_env.csv"))
-env = env %>% mutate(variable = ifelse(env$variable == "ph", "pH", ifelse(env$variable == "temp", "Temperature", "Salinity")))
-env$variable = factor(env$variable, levels = c("Temperature", "Salinity", "pH"))
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0317"
+env = read.csv(paste0(path_nasi2, "/df_env.csv"))
+env = env %>% mutate(variable = ifelse(env$variable == "Temp", "Temperature", "Salinity"))
 
 # all
 g = ggplot(env, aes(x = x, y = y, color = sp))
@@ -59,23 +59,23 @@ f = facet_wrap(~ sp, scales = "free", ncol = 4)
 labs = labs(x = "Salinity (scaled)", y = "Effect of environment", color = "Species")
 fig_env_sal = g+l+f+labs+theme_bw()
 
-# pH
-g = ggplot(env %>% filter(variable == "pH"), aes(x = x, y = y, color = sp))
-l = geom_line()
-f = facet_wrap(~ sp, scales = "free", ncol = 4)
-labs = labs(x = "pH (scaled)", y = "Effect of environment", color = "Species")
-fig_env_ph = g+l+f+labs+theme_bw()
+# # pH
+# g = ggplot(env %>% filter(variable == "pH"), aes(x = x, y = y, color = sp))
+# l = geom_line()
+# f = facet_wrap(~ sp, scales = "free", ncol = 4)
+# labs = labs(x = "pH (scaled)", y = "Effect of environment", color = "Species")
+# fig_env_ph = g+l+f+labs+theme_bw()
 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/temp.pdf"), plot = fig_env_temp, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/sal.pdf"), plot = fig_env_sal, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/ph.pdf"), plot = fig_env_ph, units = "in", width = 11.69, height = 8.27) 
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/temp.pdf"), plot = fig_env_temp, units = "in", width = 11.69, height = 8.27) 
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし/sal.pdf"), plot = fig_env_sal, units = "in", width = 11.69, height = 8.27) 
+#ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし/ph.pdf"), plot = fig_env_ph, units = "in", width = 11.69, height = 8.27) 
 
 
 
 
 # estimated eDNA & catch map ----------------------------------------------------------------
-path_nasi = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/doなし"
-dpm = read.csv("df_dpm.csv")
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0317"
+dpm = read.csv(paste0(path_nasi2, "/df_dpm.csv"))
 m_dpm = dpm %>% filter(str_detect(variable, "mean"))
 unique(m_dpm$variable)
 m_dpm$prob = exp(m_dpm$value)/(1+exp(m_dpm$value))
@@ -88,20 +88,114 @@ pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray
 c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
 
 #eDNA
-g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = prob))
-t = geom_tile()
-c = coord_fixed(ratio = 1)
-s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
-edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
+for(i in 1:length(splist)){
+  g = ggplot(data = m_dpm %>% filter(sp == splist[i], variable == "pred_mean_eDNA"), aes(east, north, fill = prob))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1) #必要？？
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  f = facet_wrap(~ sp, ncol = 4)
+  edna = g+t+c+s+f+pol+c_map+theme_bw()+labs(title = "Estimated eDNA")
+  
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0317/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+}
+
 
 #pred_mean_catch
-g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = prob))
-t = geom_tile()
-c = coord_fixed(ratio = 1)
-s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
-catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+#何か変
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
+for(i in 1:length(splist)){
+  g = ggplot(data = m_dpm %>% filter(sp == files[i], variable == "pred_mean_catch"), aes(east, north, fill = prob))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "Occurrence", low = "white", high = "red")
+  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+}
 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
-ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
 
+
+
+
+# latent variables map -----------------------------------------------------------
+# distribution
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+df_ic = read.csv("df_ic.csv")
+
+require(viridis)
+require(cowplot)
+require(gridExtra)
+
+for(i in 1:length(splist)){
+  g1 = ggplot(df_ic %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "", low = "white", high = "red")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
+  
+  m = g1+t+c+s+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
+}
+
+
+# error of fisheries -----------------------------------------------
+path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
+df_ic2 = read.csv(paste0(path_nasi2, "/df_ic2.csv"))
+
+require(viridis)
+require(cowplot)
+require(gridExtra)
+
+for(i in 1:length(splist)){
+  g1 = ggplot(df_ic2 %>% filter(sp == splist[i]), aes(x = x, y = y, fill = mean_s_ie))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "", low = "white", high = "red")
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "", fill = "")
+  
+  m = g1+t+c+s+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
+}
+
+
+
+
+
+# map raw data --------------------------------------------------
+# with map
+world_map <- map_data("world")
+jap <- subset(world_map, world_map$region == "Japan")
+jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
+pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
+
+
+setwd("/Users/Yuki/Dropbox/eDNA_INLA")
+# 2018 ----------------------------------------------------------
+# eDNA & env ----------------------------------------------------------
+# データは4~12月，神奈川は地点によって調査がなかった月がある
+mifish = read.csv("joint_edna2018.csv")
+
+# catch ---------------------------------------------------------
+# データは1-12月
+data = read.csv("joint_cpue2018.csv")
+data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
+
+# select species ------------------------------------------------
+e_fish = mifish %>% filter(sp_group == "konosiro", layer == "B")
+summary(e_fish)
+
+c_fish = data %>% filter(sp == "konosiro")
+summary(c_fish)
+
+map = rbind(e_fish %>% select(lng, lat) %>% dplyr::rename(lon = lng) %>% mutate(data = "eDNA"),
+            c_fish %>% select(lon, lat) %>% mutate(data = "CPUE"))
+
+g = ggplot(data = map, aes(lon, lat, color = data))
+p = geom_point()
+raw_map = g+p+pol+c_map+theme_bw()+labs(title = "")
+ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/raw_map.pdf"), plot = raw_map, units = "in", width = 11.69, height = 8.27) 
 

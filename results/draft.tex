@@ -170,7 +170,7 @@ In laboratory, eDNA extraction, eDNA amplification, and eDNA sequence were condu
 
 
 \flushleft{\textbf{2.2.2 Catch statistics}}\\
-A part of catch statistics of small-scale bottom trawl fisheries recorded by several representative boats of Chiba Prefecture were provided by Chiba Prefecture. This data included date, geographic location, efforts (number of tows), gear, and catch weight (kg) in each fish. Almost of all gear was beam trawl although dredge net also used. The species which also detected by eDNA was \textit{Conger myriaster} (マアナゴ), \textit{Kareius bicoloratus} (イシガレイ), \textit{Lateolabrax japonicus} (スズキ), and \textit{Konosirus punctatus} (コノシロ). Thus, we estimated the spatial distribution of these four species using the eDNA-IDM. \textcolor{red}{マコガレイ，カマス類，クロダイ，イシモチ類も解析できる？？}
+A part of catch statistics of small-scale bottom trawl fisheries recorded by several representative boats of Chiba Prefecture were provided by Chiba Prefecture. This data included date, geographic location, efforts (number of tows), gear, and catch weight (kg) in each fish. Almost of all gear was beam trawl although dredge net also used. The species which also detected by eDNA was \textit{Conger myriaster} (マアナゴ), \textit{Kareius bicoloratus} (イシガレイ), \textit{Pseudopleuronectes yokohamae} (マコガレイ), \textit{Lateolabrax japonicus} (スズキ), \textit{Konosirus punctatus} (コノシロ), \textit{Acanthopagrus schlegelii}, species group of \textit{Pennahia} which includes \textit{Pennahia argentata} and \textit{Nibea mitsukurii} (イシモチ類), and species group of \textit{Sphyraena} which includes \textit{Sphyraena pinguis}, \textit{Sphyraena japonica}, and \textit{Promethichthys prometheus}. Thus, we estimated the spatial distribution of these four species using the eDNA-IDM. \textcolor{red}{カマス類とイシモチ類の種群の書き方を工夫する．あと，表でまとめる？}
 
 \flushleft{\textbf{2.2.3 Estimation of spatial distribution}}\\
 To estimate the spatial distribution of four focal species using eDNA and catch data by considering with spatial  uncertainties of eDNA, we fitted the model (equation 1) to the presence/absence of eDNA and of catch collected in Tokyo Bay as follows:
@@ -179,11 +179,15 @@ To estimate the spatial distribution of four focal species using eDNA and catch 
 \mathrm{logit} \ \ p_{e}(s_{i}) = \alpha_{e} + \sum_{k}f_{k}(x_{k}(s_{i})) + w \theta(s_{i}) + u_{e}(s_{i})
 \]
 \[
-\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \beta_{i} + \theta(s_{i}) + u_{c}(s_{i})
+\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \theta(s_{i}) + u_{c}(s_{i})
 \]
+%\[
+%\mathrm{logit} \ \ p_{c}(s_{i}) = \alpha_{c} + \beta_{i} + \theta(s_{i}) + u_{c}(s_{i})
+%\]
 where $\alpha$ is the intercept, and $x_{k}(s_{i})$ is the covariates at sites $i$ for occurrence probabilities of eDNA at sites $i$. In the study, seawater temperature, salinity, pH, and DO were used as covariates which effect on the occurrence of eDNA (i.e., $k = 4$). $u(s_{i})$ is spatial error that is specific for each data following multivariate normal distributions $\mathrm{MVN}(0, \mathbf{R})$, where the variance--covariance matrix $\mathbf{R}$ is a Mat\'{e}rn correlation function. $\theta$ which is shared between eDNA and catch is the common spatial pattern between the two data, which cannot explain by each terms of the equations. That is, $\theta$ can be interpreted as the spatial distribution of species we want to know. \textcolor{red}{共変量の非線形性について書く}Parameters in this model was estimated by Integrated Nested Laplace Approximation using using the R-INLA package (Lindgren, 2012) in \textcolor{red}{R 3.6.1 (R Development Core Team, 2019).}
 \ \ \ \ \ \ \ \ \ \ 
 
+\section{Results}
 
 
 

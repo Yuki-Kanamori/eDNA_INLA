@@ -1,16 +1,14 @@
-path_nasi2 = "/Users/Yuki/Dropbox/eDNA_INLA/est0314/dophなし"
-# files1 = list.files(path_nasi, pattern = ".Rdata")
-
-
-splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
-
+df_env = NULL
+df_waic = NULL
 df_dpm = NULL
 df1 = NULL
 df2 = NULL
 df3 = NULL
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
-  setwd("/Users/Yuki/Dropbox/eDNA_INLA")
+  dirname = "/Users/Yuki/Dropbox/eDNA_INLA"
+  setwd(dir = dirname)
   
   require(INLA)
   require(tidyverse)
@@ -28,7 +26,7 @@ for(i in 1:length(splist)){
     data = read.csv("joint_cpue2018.csv")
     data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
   }else{
-    data = read.csv("joint_cpue2018_tuikasp.csv")
+    data = read.csv("joint_cpue2018_tuikasp2.csv")
     data$cpue = data$catch/data$m_effort
   }
   
@@ -135,14 +133,13 @@ for(i in 1:length(splist)){
   #eDNA
   e_stk = inla.stack(data = list(y = cbind(edna, NA)),
                      A = list(e_A, 1),
-                     effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), list(eb.0 = rep(1, length(edna)), temp = scale(e_fish$temp), salinity = scale(e_fish$salinity), DO = scale(e_fish$DO), pH = scale(e_fish$pH))),
+                     effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), list(eb.0 = rep(1, length(edna)), salinity = scale(e_fish$salinity))),
                      tag = "e_dat")
   na = as.matrix(cbind(rep(NA, nrow(coop)), rep(NA, nrow(coop))))
   ep_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                       A = list(Ap, 1),
                       effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), 
-                                     list(eb.0 = rep(1, nrow(coop)), temp = rep(1, nrow(coop)), salinity = rep(1, nrow(coop)), DO = rep(1, nrow(coop)), pH = rep(1, nrow(coop)))
-                      ),
+                                     list(eb.0 = rep(1, nrow(coop)), salinity = rep(1, nrow(coop)))),
                       tag = "ep_dat")
   
   stk_edna = inla.stack(e_stk, ep_stk)
@@ -161,14 +158,33 @@ for(i in 1:length(splist)){
   
   stk = inla.stack(stk_edna, stk_catch)
   
-  file = list.files(path_nasi, pattern = paste0(splist[i], ".Rdata"))
-  setwd(dir = path_nasi)
-  load(file)
+  # formula
+  formula = y ~ 0 + cb.0 + eb.0 + 
+    f(salinity, model = "rw1")  + 
+    f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + 
+    f(i.c2, model = spde) + f(i.e2, model = spde)
+  
+  res = inla(formula, 
+             data = inla.stack.data(stk), 
+             family = c("binomial", "binomial"), 
+             control.predictor = list(compute = TRUE, A = inla.stack.A(stk), link = 1), 
+             control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
+             control.compute = list(waic = TRUE, dic = TRUE))
+  
+  res[[53]] = "scaled(sal)"
+  res[[54]] = paste0(splist[i])
+  
+  
+  
+  
+  
+  dir_save = paste0(dirname, "/", Sys.Date(), "sal")
+  dir.create(dir_save)
+  setwd(dir = dir_save)
+  save(res, file = paste0(splist[i], ".Rdata"))
   
   best_kono = res
   
-
-# estimated eDNA and catch ------------------------------------------------
   index_ep = inla.stack.index(stk, tag = "ep_dat")$data
   index_cp = inla.stack.index(stk, tag = "cp_dat")$data
   
@@ -194,14 +210,42 @@ for(i in 1:length(splist)){
   
   dpm_e$variable = as.factor(dpm_e$variable)
   dpm_c$variable = as.factor(dpm_c$variable)
+  
+  # with map
+  world_map <- map_data("world")
+  jap <- subset(world_map, world_map$region == "Japan")
+  jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
+  pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+  c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
+  
   dpm = rbind(dpm_e, dpm_c)
+  m_dpm = dpm %>% filter(str_detect(variable, "mean"))
+  unique(m_dpm$variable)
   dpm$sp = paste0(splist[i])
   df_dpm = rbind(df_dpm, dpm)
   
+  #eDNA
+  g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = value))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  
+  #pred_mean_catch
+  g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = value))
+  t = geom_tile()
+  c = coord_fixed(ratio = 1)
+  s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  
+  ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
   
   
+  # projecting the spatial field ----------------------------------
   # latent distribution -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+  # range_e = apply(coop, 2, range)
   proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
   mean_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$mean)
   sd_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$sd)
@@ -209,12 +253,25 @@ for(i in 1:length(splist)){
   df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
   df_ie$mean_s = as.vector(mean_s_ie)
   df_ie$sd_s = as.vector(sd_s_ie)
+  
+  require(viridis)
+  require(cowplot)
+  require(gridExtra)
+  
+  g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
+  g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
+  # r = geom_raster()
+  t = geom_tile()
+  v = scale_fill_viridis(na.value = "transparent")
+  c = coord_fixed(ratio = 1)
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
+  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
   df_ic = df_ie
   df_ic$sp = paste0(splist[i])
   df1 = rbind(df1, df_ic)
-  
-  
-  
   
   # latent fisheries pattern -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
@@ -226,11 +283,20 @@ for(i in 1:length(splist)){
   df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
   df_ic2$mean_s = as.vector(mean_s_ic2)
   df_ic2$sd_s = as.vector(sd_s_ic2)
+  
+  g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
+  g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
+  # r = geom_raster()
+  t = geom_tile()
+  v = scale_fill_viridis(na.value = "transparent")
+  c = coord_fixed(ratio = 1)
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
+  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
   df_ic2$sp = paste0(splist[i])
   df2 = rbind(df2, df_ic2)
-  
-  
-  
   
   # latent pom pattern -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
@@ -242,14 +308,43 @@ for(i in 1:length(splist)){
   df_ie2 = expand.grid(x = proj_e$x, y = proj_e$y)
   df_ie2$mean_s = as.vector(mean_s_ie2)
   df_ie2$sd_s = as.vector(sd_s_ie2)
+  
+  g1 = ggplot(df_ie2, aes(x = x, y = y, fill = mean_s_ie))
+  g2 = ggplot(df_ie2, aes(x = x, y = y, fill = sd_s_ie))
+  # r = geom_raster()
+  t = geom_tile()
+  v = scale_fill_viridis(na.value = "transparent")
+  c = coord_fixed(ratio = 1)
+  labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u1")
+  labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "Mean_u1")
+  m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  ggsave(file = paste0(dir_save, "/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
   df_ie2$sp = paste0(splist[i])
   df3 = rbind(df3, df_ie2)
   
+  # environmental effect -----------------------------------------------------------
+  effect = rbind(data.frame(x = best_kono$summary.random$temp$ID, y = best_kono$summary.random$temp$mean, variable = "Temp"),
+                 data.frame(x = best_kono$summary.random$salinity$ID, y = best_kono$summary.random$salinity$mean, variable = "Sal"))
+  effect = effect %>% filter(x != 1)
+  effect$variable = factor(effect$variable, levels = c("Temp", "Sal"))
+  effect$sp = paste0(splist[i])
+  df_env = rbind(df_env, effect)
+  
+  g = ggplot(effect, aes(x = x, y = y))
+  l = geom_line()
+  f = facet_wrap(~ variable, scales = "free")
+  labs = labs(x = "Environmental variable", y = "Effect of environment", title = paste0(splist[i]))
+  env = g+l+f+labs+theme_bw()
+  ggsave(file = paste0(dir_save, "/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
+  
+  waic = data.frame(waic = res$waic$waic, sp = paste0(splist[i]))
+  df_waic = rbind(df_waic, waic)
 }
 
-
-setwd(dir = path_nasi2)
+write.csv(df_env, "df_env.csv")
+write.csv(df_waic, "df_waic.csv")
 write.csv(df_dpm, "df_dpm.csv")
 write.csv(df1, "df_ic.csv")
 write.csv(df2, "df_ic2.csv")
-write.csv(df3, "df_ie2.csv")
+write.csv(df3, "df_ie.csv")

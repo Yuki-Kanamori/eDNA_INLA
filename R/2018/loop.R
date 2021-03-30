@@ -3,7 +3,8 @@ df_waic = NULL
 splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
 
 for(i in 1:length(splist)){
-  setwd("/Users/Yuki/Dropbox/eDNA_INLA")
+  dirname = "/Users/Yuki/Dropbox/eDNA_INLA"
+  setwd(dir = dirname)
   
   require(INLA)
   require(tidyverse)
@@ -170,7 +171,9 @@ for(i in 1:length(splist)){
   res[[53]] = "cpue+scaled(env)"
   res[[54]] = paste0(splist[i])
   
-  setwd(dir = "/Users/Yuki/Dropbox/eDNA_INLA/est0314")
+  dir_save = paste0(dirname, "/", Sys.Date())
+  dir.create(dir_save)
+  setwd(dir = dir_save)
   save(res, file = paste0(splist[i], ".Rdata"))
   
   best_kono = res
@@ -217,17 +220,17 @@ for(i in 1:length(splist)){
   t = geom_tile()
   c = coord_fixed(ratio = 1)
   s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
-  edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = "kurodai")
+  edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = "")
   
   #pred_mean_catch
   g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = value))
   t = geom_tile()
   c = coord_fixed(ratio = 1)
   s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
-  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = "kurodai")
+  catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = "")
   
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
   
   
   # projecting the spatial field ----------------------------------
@@ -255,7 +258,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   
   # latent fisheries pattern -------------------------------------------
@@ -278,7 +281,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   
   # latent pom pattern -------------------------------------------
@@ -301,7 +304,7 @@ for(i in 1:length(splist)){
   labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean")
   labs2 = labs(x = "Longitude", y = "Latitude", title = "SD")
   m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/pom_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
   
   
   # environmental effect -----------------------------------------------------------
@@ -317,9 +320,9 @@ for(i in 1:length(splist)){
   g = ggplot(effect, aes(x = x, y = y))
   l = geom_line()
   f = facet_wrap(~ variable, scales = "free")
-  labs = labs(x = "Environmental variable", y = "Effect of environment", title = "konosiro")
+  labs = labs(x = "Environmental variable", y = "Effect of environment", title = "")
   env = g+l+f+labs+theme_bw()
-  ggsave(file = paste0("/Users/Yuki/Dropbox/eDNA_INLA/est0314/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
+  ggsave(file = paste0(dir_save, "/env_", splist[i], ".pdf"), plot = env, units = "in", width = 11.69, height = 8.27) 
 
   waic = data.frame(waic = res_kono$waic$waic, sp = paste0(splist[i]))
   df_waic = rbind(df_waic, waic)
