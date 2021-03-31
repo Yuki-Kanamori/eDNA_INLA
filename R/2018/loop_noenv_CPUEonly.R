@@ -1,0 +1,231 @@
+#df_env = NULL
+df_waic = NULL
+df_dpm = NULL
+df1 = NULL
+df2 = NULL
+df3 = NULL
+splist = c("konosiro", "makogarei", "maanago", "isigarei", "suzuki", "kurodai", "kamasu-rui", "isimoti-rui")
+
+for(i in 1:length(splist)){
+  dirname = "/Users/Yuki/Dropbox/eDNA_INLA"
+  setwd(dir = dirname)
+  
+  require(INLA)
+  require(tidyverse)
+  require(openxlsx)
+  
+  # 2018 ----------------------------------------------------------
+  # catch ---------------------------------------------------------
+  # データは1-12月
+  if(i < 6){
+    data = read.csv("joint_cpue2018.csv")
+    data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
+  }else{
+    data = read.csv("joint_cpue2018_tuikasp2.csv")
+    data$cpue = data$catch/data$m_effort
+  }
+  
+  
+  
+  # select species ------------------------------------------------
+  c_fish = data %>% filter(sp == paste0(splist[i]))
+  summary(c_fish)
+  catch = (c_fish$cpue > 0) + 0
+  summary(catch)
+  
+  
+  # INLA ----------------------------------------------------------
+  #lonlat
+  c_loc = as.matrix(cbind(c_fish$lon, c_fish$lat))
+
+  c_locp = as.matrix(cbind(c_fish %>% filter(catch > 0) %>% select(lon), c_fish %>% filter(catch > 0) %>% select(lat)))
+  c_loca = as.matrix(cbind(c_fish %>% filter(catch == 0) %>% select(lon), c_fish %>% filter(catch == 0) %>% select(lat)))
+  
+  bound2 = inla.nonconvex.hull(c_loc, convex = 0.05, concave = -0.15)
+  mesh2 = inla.mesh.2d(boundary = bound2, max.edge = c(0.04, 0.04), cutoff = 0.08/5)
+  plot(mesh2)
+  points(c_locp, col = "red", pch = 15, cex = 2) #pdfにする時はcex = 1，その他は.5にする
+  points(c_loca, col = "orange", pch = 16, cex = 1) #pdfにする時はcex = 1，その他は.5にする
+  mesh2$n #618
+  
+  # projector matricies
+  c_A = inla.spde.make.A(mesh2, loc = c_loc)
+  dim(c_A) # 2321, 618
+  table(rowSums(c_A > 0))
+  table(rowSums(c_A))
+  table(colSums(c_A) > 0)
+  
+  # for prediction ------------------------------------------------
+  setwd('/Users/Yuki/FRA/INLAren/spde-book-files')
+  
+  ## ----opts, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE----
+  source('R/initial_setup.R')
+  opts_chunk$set(
+    fig.path = 'figs/barrier-'
+  )
+  library(scales)
+  library(rgeos)
+  ## High resolution maps when using map()
+  library(mapdata) 
+  ## Map features, map2SpatialPolygons()
+  library(maptools)
+  
+  
+  # Tokyo Bay ---------------------------------------------------------------
+  # Select region 
+  map <- map("world", "Japan", fill = TRUE,
+             col = "transparent", plot = TRUE)
+  IDs <- sapply(strsplit(map$names, ":"), function(x) x[1])
+  map.sp <- map2SpatialPolygons(
+    map, IDs = IDs,
+    proj4string = CRS("+proj=longlat +datum=WGS84")) #緯度経度データ
+  summary(map.sp)
+  
+  # make a polygon ------------------------------------------------------------
+  pl.sel <- SpatialPolygons(list(Polygons(list(Polygon(
+    cbind(c(139.7, 139.5, 139.7, 140.1, 140.3, 139.9), # x-axis 
+          c(35.1,  35.4,  35.8,  35.8,  35.4,  35.1)), # y-axis
+    FALSE)), '0')), proj4string = CRS(proj4string(map.sp))) #緯度経度データ
+  # 35.2->35に変更->35.1に変更
+  summary(pl.sel)
+  poly.water <- gDifference(pl.sel, map.sp)
+  plot(pl.sel)
+  plot(map.sp)
+  plot(poly.water)
+  
+  tok_bor = poly.water@polygons[[1]]@Polygons[[1]]@coords
+  
+  bb_tok = poly.water@bbox
+  x = seq(bb_tok[1, "min"] - 1, bb_tok[1, "max"] + 1, length.out = 150)
+  y = seq(bb_tok[2, "min"] - 1, bb_tok[2, "max"] + 1, length.out = 150)
+  coop = as.matrix(expand.grid(x, y))
+  ind = point.in.polygon(coop[, 1], coop[, 2],
+                         tok_bor[, 1], tok_bor[, 2])
+  coop = coop[which(ind == 1), ]
+  plot(coop, asp = 1)
+  
+  Ap = inla.spde.make.A(mesh = mesh2, loc = coop)
+  dim(Ap) #431, 618
+  
+  # spde
+  spde = inla.spde2.pcmatern(mesh = mesh2, alpha = 2, prior.range = c(0.01, 0.05), prior.sigma = c(1, 0.01))
+  
+  # stack ---------------------------------------------------------
+  #cpue
+  c_stk = inla.stack(data = list(y = cbind(NA, catch)),
+                     A = list(c_A, 1),
+                     effects = list(list(i.c2 = 1:mesh2$n), list(cb.0 = rep(1, length(catch)))),
+                     tag = "c_dat")
+  cp_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
+                      A = list(Ap, 1),
+                      effects = list(list(i.c2 = 1:mesh2$n), 
+                                     list(cb.0 = rep(1, nrow(coop)))),
+                      tag = "cp_dat")
+  stk_catch = inla.stack(c_stk, cp_stk)
+  
+  # formula
+  formula = y ~ 0 + cb.0 + f(i.c2, model = spde)
+  
+  res = inla(formula, 
+             data = inla.stack.data(stk_catch), 
+             family = c("binomial", "binomial"), 
+             control.predictor = list(compute = TRUE, A = inla.stack.A(stk_catch), link = 1), 
+             control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
+             control.compute = list(waic = TRUE, dic = TRUE))
+  
+  res[[53]] = "CPUEonly/no_env"
+  res[[54]] = paste0(splist[i])
+  
+  
+  
+  
+  
+  dir_save = paste0(dirname, "/", Sys.Date(), "noenv_CPUE")
+  dir.create(dir_save)
+  setwd(dir = dir_save)
+  save(res, file = paste0(splist[i], ".Rdata"))
+  
+  best_kono = res
+  
+  index_cp = inla.stack.index(stk, tag = "cp_dat")$data
+  
+  pred_mean_c = best_kono$summary.fitted.values[index_cp, "mean"]
+  pred_ll_c = best_kono$summary.fitted.values[index_cp, "0.025quant"]
+  pred_ul_c = best_kono$summary.fitted.values[index_cp, "0.975quant"]
+  
+  dpm_c = rbind(data.frame(east = coop[, 1], north = coop[, 2],
+                           value = pred_mean_c, variable = "pred_mean_catch"),
+                data.frame(east = coop[, 1], north = coop[, 2],
+                           value = pred_ll_c, variable = "pred_ll_catch"),
+                data.frame(east = coop[, 1], north = coop[, 2],
+                           value = pred_ul_c, variable = "pred_ul_catch"))
+  
+  dpm_c$variable = as.factor(dpm_c$variable)
+  
+  # # with map
+  # world_map <- map_data("world")
+  # jap <- subset(world_map, world_map$region == "Japan")
+  # jap_cog <- jap[jap$lat > 35 & jap$lat < 38 & jap$long > 139 & jap$long < 141, ]
+  # pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
+  # c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
+  
+  dpm = dpm_c
+  m_dpm = dpm %>% filter(str_detect(variable, "mean"))
+  unique(m_dpm$variable)
+  dpm$sp = paste0(splist[i])
+  df_dpm = rbind(df_dpm, dpm)
+  
+  # #eDNA
+  # g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_eDNA"), aes(east, north, fill = value))
+  # t = geom_tile()
+  # c = coord_fixed(ratio = 1)
+  # s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  # edna = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  # 
+  # #pred_mean_catch
+  # g = ggplot(data = m_dpm %>% filter(variable == "pred_mean_catch"), aes(east, north, fill = value))
+  # t = geom_tile()
+  # c = coord_fixed(ratio = 1)
+  # s = scale_fill_gradient(name = "encounter prob. (logit)", low = "blue", high = "orange")
+  # catch = g+t+c+s+pol+c_map+theme_bw()+labs(title = paste0(splist[i]))
+  # 
+  # ggsave(file = paste0(dir_save, "/edna_", splist[i], ".pdf"), plot = edna, units = "in", width = 11.69, height = 8.27) 
+  # ggsave(file = paste0(dir_save, "/catch_", splist[i], ".pdf"), plot = catch, units = "in", width = 11.69, height = 8.27) 
+  
+  
+  # projecting the spatial field ----------------------------------
+  # latent fisheries pattern -------------------------------------------
+  range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+  # range_e = apply(coop, 2, range)
+  proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
+  mean_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$mean)
+  sd_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$sd)
+  
+  df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
+  df_ic2$mean_s = as.vector(mean_s_ic2)
+  df_ic2$sd_s = as.vector(sd_s_ic2)
+  
+  # g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
+  # g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
+  # # r = geom_raster()
+  # t = geom_tile()
+  # v = scale_fill_viridis(na.value = "transparent")
+  # c = coord_fixed(ratio = 1)
+  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
+  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
+  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  
+  df_ic2$sp = paste0(splist[i])
+  df2 = rbind(df2, df_ic2)
+  
+  waic = data.frame(waic = res$waic$waic, sp = paste0(splist[i]))
+  df_waic = rbind(df_waic, waic)
+}
+
+setwd(dir = dir_save)
+write.csv(df_waic, "df_waic.csv")
+write.csv(df_dpm, "df_dpm.csv")
+write.csv(df1, "df_ic.csv")
+write.csv(df2, "df_ic2.csv")
+write.csv(df3, "df_ie.csv")
