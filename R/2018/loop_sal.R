@@ -341,6 +341,7 @@ for(i in 1:length(splist)){
   df_waic = rbind(df_waic, waic)
 }
 
+setwd(dir = dir_save)
 write.csv(df_env, "df_env.csv")
 write.csv(df_waic, "df_waic.csv")
 write.csv(df_dpm, "df_dpm.csv")
