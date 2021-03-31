@@ -20,45 +20,45 @@ for(i in 1:length(splist)){
   # データは4~12月，神奈川は地点によって調査がなかった月がある
   mifish = read.csv("joint_edna2018.csv")
   
-  # catch ---------------------------------------------------------
-  # データは1-12月
-  if(i < 6){
-    data = read.csv("joint_cpue2018.csv")
-    data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
-  }else{
-    data = read.csv("joint_cpue2018_tuikasp2.csv")
-    data$cpue = data$catch/data$m_effort
-  }
-  
-  
+  # # catch ---------------------------------------------------------
+  # # データは1-12月
+  # if(i < 6){
+  #   data = read.csv("joint_cpue2018.csv")
+  #   data = data %>% dplyr::rename(sp = FISH, cpue = CPUE, lon = Lon, lat = Lat)
+  # }else{
+  #   data = read.csv("joint_cpue2018_tuikasp2.csv")
+  #   data$cpue = data$catch/data$m_effort
+  # }
+  # 
+  # 
   
   # select species ------------------------------------------------
   e_fish = mifish %>% filter(sp_group == paste0(splist[i]), layer == "B")
   summary(e_fish)
   edna = (e_fish$count > 0) + 0
   
-  c_fish = data %>% filter(sp == paste0(splist[i]))
-  # c_mako = data %>% filter(FISH == "makogarei", Y == 2018, M > 2) #eDNAと月を揃えた方が良い？
-  summary(c_fish)
-  # catch = (c_fish$catch > 0) + 0
-  catch = (c_fish$cpue > 0) + 0
-  summary(catch)
+  # c_fish = data %>% filter(sp == paste0(splist[i]))
+  # # c_mako = data %>% filter(FISH == "makogarei", Y == 2018, M > 2) #eDNAと月を揃えた方が良い？
+  # summary(c_fish)
+  # # catch = (c_fish$catch > 0) + 0
+  # catch = (c_fish$cpue > 0) + 0
+  # summary(catch)
   
   
   # INLA ----------------------------------------------------------
   #lonlat
   e_loc = as.matrix(cbind(e_fish$lng, e_fish$lat))
-  c_loc = as.matrix(cbind(c_fish$lon, c_fish$lat))
-  loc = rbind(e_loc, c_loc)
+  # c_loc = as.matrix(cbind(c_fish$lon, c_fish$lat))
+  # loc = rbind(e_loc, c_loc)
+  # 
+  # c_locp = as.matrix(cbind(c_fish %>% filter(catch > 0) %>% select(lon), c_fish %>% filter(catch > 0) %>% select(lat)))
+  # c_loca = as.matrix(cbind(c_fish %>% filter(catch == 0) %>% select(lon), c_fish %>% filter(catch == 0) %>% select(lat)))
   
-  c_locp = as.matrix(cbind(c_fish %>% filter(catch > 0) %>% select(lon), c_fish %>% filter(catch > 0) %>% select(lat)))
-  c_loca = as.matrix(cbind(c_fish %>% filter(catch == 0) %>% select(lon), c_fish %>% filter(catch == 0) %>% select(lat)))
-  
-  bound2 = inla.nonconvex.hull(loc, convex = 0.05, concave = -0.15)
+  bound2 = inla.nonconvex.hull(e_loc, convex = 0.05, concave = -0.15)
   mesh2 = inla.mesh.2d(boundary = bound2, max.edge = c(0.04, 0.04), cutoff = 0.08/5)
   plot(mesh2)
-  points(c_locp, col = "red", pch = 15, cex = 2) #pdfにする時はcex = 1，その他は.5にする
-  points(c_loca, col = "orange", pch = 16, cex = 1) #pdfにする時はcex = 1，その他は.5にする
+  # points(c_locp, col = "red", pch = 15, cex = 2) #pdfにする時はcex = 1，その他は.5にする
+  # points(c_loca, col = "orange", pch = 16, cex = 1) #pdfにする時はcex = 1，その他は.5にする
   points(e_loc, col = "green", pch = 16, cex = 1)
   mesh2$n #618
   
@@ -68,11 +68,11 @@ for(i in 1:length(splist)){
   table(rowSums(e_A > 0))
   table(rowSums(e_A))
   table(colSums(e_A) > 0)
-  c_A = inla.spde.make.A(mesh2, loc = c_loc)
-  dim(c_A) # 2321, 618
-  table(rowSums(c_A > 0))
-  table(rowSums(c_A))
-  table(colSums(c_A) > 0)
+  # c_A = inla.spde.make.A(mesh2, loc = c_loc)
+  # dim(c_A) # 2321, 618
+  # table(rowSums(c_A > 0))
+  # table(rowSums(c_A))
+  # table(colSums(c_A) > 0)
   
   # for prediction ------------------------------------------------
   setwd('/Users/Yuki/FRA/INLAren/spde-book-files')
@@ -133,51 +133,49 @@ for(i in 1:length(splist)){
   #eDNA
   e_stk = inla.stack(data = list(y = cbind(edna, NA)),
                      A = list(e_A, 1),
-                     effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), list(eb.0 = rep(1, length(edna)))),
+                     effects = list(list(i.e2 = 1:mesh2$n), list(eb.0 = rep(1, length(edna)))),
                      tag = "e_dat")
   na = as.matrix(cbind(rep(NA, nrow(coop)), rep(NA, nrow(coop))))
   ep_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
                       A = list(Ap, 1),
-                      effects = list(list(i.e = 1:mesh2$n, i.e2 = 1:mesh2$n), 
+                      effects = list(list(i.e2 = 1:mesh2$n), 
                                      list(eb.0 = rep(1, nrow(coop)))),
                       tag = "ep_dat")
   
   stk_edna = inla.stack(e_stk, ep_stk)
   
-  #cpue
-  c_stk = inla.stack(data = list(y = cbind(NA, catch)),
-                     A = list(c_A, 1),
-                     effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), list(cb.0 = rep(1, length(catch)))),
-                     tag = "c_dat")
-  cp_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
-                      A = list(Ap, 1),
-                      effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), 
-                                     list(cb.0 = rep(1, nrow(coop)))),
-                      tag = "cp_dat")
-  stk_catch = inla.stack(c_stk, cp_stk)
-  
-  stk = inla.stack(stk_edna, stk_catch)
+  # #cpue
+  # c_stk = inla.stack(data = list(y = cbind(NA, catch)),
+  #                    A = list(c_A, 1),
+  #                    effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), list(cb.0 = rep(1, length(catch)))),
+  #                    tag = "c_dat")
+  # cp_stk = inla.stack(data = list(y = cbind(na[, 1], na[, 2])),
+  #                     A = list(Ap, 1),
+  #                     effects = list(list(i.c = 1:mesh2$n, i.c2 = 1:mesh2$n), 
+  #                                    list(cb.0 = rep(1, nrow(coop)))),
+  #                     tag = "cp_dat")
+  # stk_catch = inla.stack(c_stk, cp_stk)
+  # 
+  # stk = inla.stack(stk_edna, stk_catch)
   
   # formula
-  formula = y ~ 0 + cb.0 + eb.0 + 
-    f(i.c, model = spde) + f(i.e, copy = "i.c", fixed = FALSE) + 
-    f(i.c2, model = spde) + f(i.e2, model = spde)
+  formula = y ~ 0 + eb.0 + f(i.e2, model = spde)
   
   res = inla(formula, 
-             data = inla.stack.data(stk), 
+             data = inla.stack.data(stk_edna), 
              family = c("binomial", "binomial"), 
-             control.predictor = list(compute = TRUE, A = inla.stack.A(stk), link = 1), 
+             control.predictor = list(compute = TRUE, A = inla.stack.A(stk_edna), link = 1), 
              control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
              control.compute = list(waic = TRUE, dic = TRUE))
   
-  res[[53]] = "no_env"
+  res[[53]] = "eDNAonly/no_env"
   res[[54]] = paste0(splist[i])
   
   
   
   
   
-  dir_save = paste0(dirname, "/", Sys.Date(), "noenv")
+  dir_save = paste0(dirname, "/", Sys.Date(), "noenv_eDNA")
   dir.create(dir_save)
   setwd(dir = dir_save)
   save(res, file = paste0(splist[i], ".Rdata"))
@@ -185,14 +183,10 @@ for(i in 1:length(splist)){
   best_kono = res
   
   index_ep = inla.stack.index(stk, tag = "ep_dat")$data
-  index_cp = inla.stack.index(stk, tag = "cp_dat")$data
   
   pred_mean_e = best_kono$summary.fitted.values[index_ep, "mean"]
-  pred_mean_c = best_kono$summary.fitted.values[index_cp, "mean"]
   pred_ll_e = best_kono$summary.fitted.values[index_ep, "0.025quant"]
   pred_ul_e = best_kono$summary.fitted.values[index_ep, "0.975quant"]
-  pred_ll_c = best_kono$summary.fitted.values[index_cp, "0.025quant"]
-  pred_ul_c = best_kono$summary.fitted.values[index_cp, "0.975quant"]
   
   dpm_e = rbind(data.frame(east = coop[, 1], north = coop[, 2],
                            value = pred_mean_e, variable = "pred_mean_eDNA"),
@@ -200,15 +194,8 @@ for(i in 1:length(splist)){
                            value = pred_ll_e, variable = "pred_ll_eDNA"),
                 data.frame(east = coop[, 1], north = coop[, 2],
                            value = pred_ul_e, variable = "pred_ul_eDNA"))
-  dpm_c = rbind(data.frame(east = coop[, 1], north = coop[, 2],
-                           value = pred_mean_c, variable = "pred_mean_catch"),
-                data.frame(east = coop[, 1], north = coop[, 2],
-                           value = pred_ll_c, variable = "pred_ll_catch"),
-                data.frame(east = coop[, 1], north = coop[, 2],
-                           value = pred_ul_c, variable = "pred_ul_catch"))
-  
   dpm_e$variable = as.factor(dpm_e$variable)
-  dpm_c$variable = as.factor(dpm_c$variable)
+
   
   # # with map
   # world_map <- map_data("world")
@@ -217,7 +204,7 @@ for(i in 1:length(splist)){
   # pol = geom_polygon(data = jap_cog, aes(x=long, y=lat, group=group), colour="gray 50", fill="gray 50")
   # c_map = coord_map(xlim = c(139.5, 140.3), ylim = c(35, 35.75))
   
-  dpm = rbind(dpm_e, dpm_c)
+  dpm = dpm_e
   m_dpm = dpm %>% filter(str_detect(variable, "mean"))
   unique(m_dpm$variable)
   dpm$sp = paste0(splist[i])
@@ -243,60 +230,60 @@ for(i in 1:length(splist)){
   
   # projecting the spatial field ----------------------------------
   # latent distribution -------------------------------------------
-  range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
-  # range_e = apply(coop, 2, range)
-  proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
-  mean_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$mean)
-  sd_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$sd)
-  
-  df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
-  df_ie$mean_s = as.vector(mean_s_ie)
-  df_ie$sd_s = as.vector(sd_s_ie)
-  
-  # require(viridis)
-  # require(cowplot)
-  # require(gridExtra)
+  # range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+  # # range_e = apply(coop, 2, range)
+  # proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
+  # mean_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$mean)
+  # sd_s_ie = inla.mesh.project(proj_e, best_kono$summary.random$i.c$sd)
   # 
-  # g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
-  # g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
-  # # r = geom_raster()
-  # t = geom_tile()
-  # v = scale_fill_viridis(na.value = "transparent")
-  # c = coord_fixed(ratio = 1)
-  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
-  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
-  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  # ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
-  
-  df_ic = df_ie
-  df_ic$sp = paste0(splist[i])
-  df1 = rbind(df1, df_ic)
-  
-  # latent fisheries pattern -------------------------------------------
-  range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
-  # range_e = apply(coop, 2, range)
-  proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
-  mean_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$mean)
-  sd_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$sd)
-  
-  df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
-  df_ic2$mean_s = as.vector(mean_s_ic2)
-  df_ic2$sd_s = as.vector(sd_s_ic2)
-  
-  # g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
-  # g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
-  # # r = geom_raster()
-  # t = geom_tile()
-  # v = scale_fill_viridis(na.value = "transparent")
-  # c = coord_fixed(ratio = 1)
-  # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
-  # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
-  # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
-  # ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
-  
-  df_ic2$sp = paste0(splist[i])
-  df2 = rbind(df2, df_ic2)
-  
+  # df_ie = expand.grid(x = proj_e$x, y = proj_e$y)
+  # df_ie$mean_s = as.vector(mean_s_ie)
+  # df_ie$sd_s = as.vector(sd_s_ie)
+  # 
+  # # require(viridis)
+  # # require(cowplot)
+  # # require(gridExtra)
+  # # 
+  # # g1 = ggplot(df_ie, aes(x = x, y = y, fill = mean_s_ie))
+  # # g2 = ggplot(df_ie, aes(x = x, y = y, fill = sd_s_ie))
+  # # # r = geom_raster()
+  # # t = geom_tile()
+  # # v = scale_fill_viridis(na.value = "transparent")
+  # # c = coord_fixed(ratio = 1)
+  # # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "mean_theta")
+  # # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_theta")
+  # # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # # ggsave(file = paste0(dir_save, "/dist_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  # 
+  # df_ic = df_ie
+  # df_ic$sp = paste0(splist[i])
+  # df1 = rbind(df1, df_ic)
+  # 
+  # # latent fisheries pattern -------------------------------------------
+  # range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
+  # # range_e = apply(coop, 2, range)
+  # proj_e = inla.mesh.projector(mesh2, xlim = range_e[, 1], ylim = range_e[, 2], dims = c(50, 50))
+  # mean_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$mean)
+  # sd_s_ic2 = inla.mesh.project(proj_e, best_kono$summary.random$i.c2$sd)
+  # 
+  # df_ic2 = expand.grid(x = proj_e$x, y = proj_e$y)
+  # df_ic2$mean_s = as.vector(mean_s_ic2)
+  # df_ic2$sd_s = as.vector(sd_s_ic2)
+  # 
+  # # g1 = ggplot(df_ic2, aes(x = x, y = y, fill = mean_s_ic2))
+  # # g2 = ggplot(df_ic2, aes(x = x, y = y, fill = sd_s_ic2))
+  # # # r = geom_raster()
+  # # t = geom_tile()
+  # # v = scale_fill_viridis(na.value = "transparent")
+  # # c = coord_fixed(ratio = 1)
+  # # labs1 = labs(x = "Longitude", y = "Latitude", title = "Mean", fill = "Mean_u2")
+  # # labs2 = labs(x = "Longitude", y = "Latitude", title = "SD", fill = "SD_u2")
+  # # m = g1+t+v+c+pol+c_map+labs1+theme_bw()
+  # # ggsave(file = paste0(dir_save, "/fish_", splist[i], ".pdf"), plot = m, units = "in", width = 11.69, height = 8.27) 
+  # 
+  # df_ic2$sp = paste0(splist[i])
+  # df2 = rbind(df2, df_ic2)
+  # 
   # latent pom pattern -------------------------------------------
   range_e = apply(mesh2$loc[, c(1, 2)], 2, range)
   # range_e = apply(coop, 2, range)
