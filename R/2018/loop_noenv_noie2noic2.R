@@ -169,7 +169,7 @@ for(i in 1:length(splist)){
              control.results = list(return.marginals.random = FALSE, return.marginals.predictor = FALSE), 
              control.compute = list(waic = TRUE, dic = TRUE))
   
-  res[[53]] = "no_env"
+  res[[53]] = "no_env/noie2noic2"
   res[[54]] = paste0(splist[i])
   
   
